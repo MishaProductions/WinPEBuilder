@@ -228,10 +228,10 @@
             // OptionsTab
             // 
             this.OptionsTab.Controls.Add(this.groupBox1);
-            this.OptionsTab.Location = new System.Drawing.Point(4, 24);
+            this.OptionsTab.Location = new System.Drawing.Point(4, 22);
             this.OptionsTab.Name = "OptionsTab";
             this.OptionsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.OptionsTab.Size = new System.Drawing.Size(508, 340);
+            this.OptionsTab.Size = new System.Drawing.Size(508, 342);
             this.OptionsTab.TabIndex = 0;
             this.OptionsTab.Text = "Options";
             this.OptionsTab.UseVisualStyleBackColor = true;
@@ -323,9 +323,9 @@
             // 
             this.ProgressTab.Controls.Add(this.lblProgress);
             this.ProgressTab.Controls.Add(this.progressBar1);
-            this.ProgressTab.Location = new System.Drawing.Point(4, 24);
+            this.ProgressTab.Location = new System.Drawing.Point(4, 22);
             this.ProgressTab.Name = "ProgressTab";
-            this.ProgressTab.Size = new System.Drawing.Size(508, 340);
+            this.ProgressTab.Size = new System.Drawing.Size(508, 342);
             this.ProgressTab.TabIndex = 2;
             this.ProgressTab.Text = "Progress";
             this.ProgressTab.UseVisualStyleBackColor = true;

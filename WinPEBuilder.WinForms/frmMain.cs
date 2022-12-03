@@ -51,6 +51,10 @@ namespace WinPEBuilder.WinForms
 
             //create options
             var options = new BuilderOptions();
+            options.UseDWM = chkDWM.Checked;
+            options.EnableFullUWPSupport = chkUWP.Checked;
+            options.UseLogonUI = chkLogonUI.Checked;
+            options.UseExplorer = chkExplorer.Checked;
             if (radVHD.Checked)
             {
                 options.OutputType = BuilderOptionsOutputType.VHD;
