@@ -8,6 +8,7 @@ namespace WinPEBuilder.WinForms
         {
             InitializeComponent();
             tabControl1.TabPages.Remove(ProgressTab);
+            lblVersion.Text = "Version: " + Builder.Version;
         }
 
         private void chkDWM_CheckedChanged(object sender, EventArgs e)

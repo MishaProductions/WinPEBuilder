@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lblVersion = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.chkDWM = new System.Windows.Forms.CheckBox();
@@ -77,14 +77,14 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "MishaPE builder";
             // 
-            // label2
+            // lblVersion
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 425);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(91, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Version: loading";
+            this.lblVersion.AutoSize = true;
+            this.lblVersion.Location = new System.Drawing.Point(13, 425);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(91, 13);
+            this.lblVersion.TabIndex = 1;
+            this.lblVersion.Text = "Version: loading";
             // 
             // groupBox1
             // 
@@ -228,10 +228,10 @@
             // OptionsTab
             // 
             this.OptionsTab.Controls.Add(this.groupBox1);
-            this.OptionsTab.Location = new System.Drawing.Point(4, 22);
+            this.OptionsTab.Location = new System.Drawing.Point(4, 24);
             this.OptionsTab.Name = "OptionsTab";
             this.OptionsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.OptionsTab.Size = new System.Drawing.Size(508, 342);
+            this.OptionsTab.Size = new System.Drawing.Size(508, 340);
             this.OptionsTab.TabIndex = 0;
             this.OptionsTab.Text = "Options";
             this.OptionsTab.UseVisualStyleBackColor = true;
@@ -245,9 +245,9 @@
             this.OutputTab.Controls.Add(this.label4);
             this.OutputTab.Controls.Add(this.radISO);
             this.OutputTab.Controls.Add(this.radVHD);
-            this.OutputTab.Location = new System.Drawing.Point(4, 22);
+            this.OutputTab.Location = new System.Drawing.Point(4, 24);
             this.OutputTab.Name = "OutputTab";
-            this.OutputTab.Size = new System.Drawing.Size(508, 342);
+            this.OutputTab.Size = new System.Drawing.Size(508, 340);
             this.OutputTab.TabIndex = 3;
             this.OutputTab.Text = "Output";
             this.OutputTab.UseVisualStyleBackColor = true;
@@ -323,9 +323,9 @@
             // 
             this.ProgressTab.Controls.Add(this.lblProgress);
             this.ProgressTab.Controls.Add(this.progressBar1);
-            this.ProgressTab.Location = new System.Drawing.Point(4, 22);
+            this.ProgressTab.Location = new System.Drawing.Point(4, 24);
             this.ProgressTab.Name = "ProgressTab";
-            this.ProgressTab.Size = new System.Drawing.Size(508, 342);
+            this.ProgressTab.Size = new System.Drawing.Size(508, 340);
             this.ProgressTab.TabIndex = 2;
             this.ProgressTab.Text = "Progress";
             this.ProgressTab.UseVisualStyleBackColor = true;
@@ -362,7 +362,7 @@
             this.ClientSize = new System.Drawing.Size(546, 450);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.btnBuild);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.Name = "frmMain";
@@ -388,7 +388,7 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox chkExplorer;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
