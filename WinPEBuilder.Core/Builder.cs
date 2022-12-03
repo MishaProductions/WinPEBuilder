@@ -75,7 +75,7 @@ namespace WinPEBuilder.Core
             //5. Do modifications
             //6. Close VHD, apply boot sector
 
-            if(Directory.GetDirectories(WorkingDir+"iso").Length == 0)
+            if (Directory.GetDirectories(WorkingDir + "iso").Length == 0)
             {
                 ExtractISO(IsoPath, WorkingDir + "iso");
             }
