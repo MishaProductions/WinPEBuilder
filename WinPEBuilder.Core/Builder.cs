@@ -1,5 +1,6 @@
 ﻿using DiscUtils;
 using DiscUtils.Iso9660;
+using DiscUtils.Udf;
 
 namespace WinPEBuilder.Core
 {
@@ -67,29 +68,32 @@ namespace WinPEBuilder.Core
             Directory.CreateDirectory(WorkingDir + "installwim");
             Directory.CreateDirectory(WorkingDir + "iso");
             Directory.CreateDirectory(WorkingDir + "temp");
-
+            OnProgress?.Invoke(false, 0, "Extracting ISO");
             //1. Extract ISO (if needed)
             //2. Extract install.wim (if needed)
             //3. Create VHD
             //4. Apply boot.wim to the VHD
             //5. Do modifications
             //6. Close VHD, apply boot sector
-
-            if (Directory.GetDirectories(WorkingDir + "iso").Length == 0)
+            var d = Directory.GetDirectories(WorkingDir + @"iso\");
+            if (d.Length == 0)
             {
-                ExtractISO(IsoPath, WorkingDir + "iso");
+                ExtractISO(IsoPath, WorkingDir + @"iso\");
             }
+            OnProgress?.Invoke(false, 0, "Extracting install.wim");
         }
 
         void ExtractISO(string ISOName, string ExtractionPath)
         {
             using (FileStream ISOStream = File.Open(ISOName, FileMode.Open))
             {
-                CDReader Reader = new CDReader(ISOStream, true, true);
-                ExtractDirectory(Reader.Root, ExtractionPath + Path.GetFileNameWithoutExtension(ISOName) + "\\", "");
+                UdfReader Reader = new UdfReader(ISOStream);
+                
+                ExtractDirectory(Reader.Root, ExtractionPath + "\\", "");
                 Reader.Dispose();
             }
         }
+        int prg = 0;
         void ExtractDirectory(DiscDirectoryInfo Dinfo, string RootPath, string PathinISO)
         {
             if (!string.IsNullOrWhiteSpace(PathinISO))
@@ -108,7 +112,13 @@ namespace WinPEBuilder.Core
                 {
                     using (FileStream Fs = File.Create(RootPath + "\\" + finfo.Name)) // Here you can Set the BufferSize Also e.g. File.Create(RootPath + "\\" + finfo.Name, 4 * 1024)
                     {
-                        FileStr.CopyTo(Fs, 4 * 1024); // Buffer Size is 4 * 1024 but you can modify it in your code as per your need
+                        FileStr.CopyTo(Fs, 16 * 1024); // Buffer Size is 16 * 1024 but you can modify it in your code as per your need
+                        if (prg >= 100)
+                        {
+                            //todo improve progress
+                            prg = 1;
+                        }
+                        OnProgress?.Invoke(false, prg++, "Extracting ISO");
                     }
                 }
             }

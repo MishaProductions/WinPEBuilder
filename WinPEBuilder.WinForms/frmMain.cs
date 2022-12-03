@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Windows.Forms;
 using WinPEBuilder.Core;
 
 namespace WinPEBuilder.WinForms
@@ -9,6 +11,13 @@ namespace WinPEBuilder.WinForms
             InitializeComponent();
             tabControl1.TabPages.Remove(ProgressTab);
             lblVersion.Text = "Version: " + Builder.Version;
+
+            if(Debugger.IsAttached&& Environment.UserName.ToLower() == "misha")
+            {
+                //Debug code
+                txtIsoPath.Text = @"D:\1Misha\Downloads\25252.1010_amd64_en-us_professional_0ec350c5_convert\25252.1010.221122-1933.RS_PRERELEASE_FLT_CLIENTPRO_OEMRET_X64FRE_EN-US.ISO";
+                txtOutFile.Text = @"D:\winpegen.vhd";
+            }
         }
 
         private void chkDWM_CheckedChanged(object sender, EventArgs e)
@@ -46,7 +55,7 @@ namespace WinPEBuilder.WinForms
             }
 
             tabControl1.TabPages.Add(ProgressTab);
-
+            tabControl1.SelectedTab=ProgressTab;
             HideTabs();
             btnBuild.Visible = false;
 
@@ -66,7 +75,7 @@ namespace WinPEBuilder.WinForms
                 throw new NotImplementedException("ISO file output not implemented");
             }
 
-            var builder = new Builder(options, txtIsoPath.Text, Application.StartupPath + @"\work\");
+            var builder = new Builder(options, txtIsoPath.Text, Application.StartupPath + @"work\");
 
 
 
