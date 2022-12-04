@@ -103,6 +103,7 @@ namespace WinPEBuilder.WinForms
                 //the builder should have stopped
                 MessageBox.Show("Error occured while building: " + message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ShowTabs();
+                tabControl1.TabPages.Remove(ProgressTab);
                 btnBuild.Visible = true;
             }
         }
