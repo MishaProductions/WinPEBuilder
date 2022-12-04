@@ -12,6 +12,14 @@ namespace WinPEBuilder.Core
         private string IsoPath;
         public static string WorkingDir = "";
         public static string Version = "0.0.0.1";
+        /// <summary>
+        /// Location of the new image such as Z:\
+        /// </summary>
+        public string ImagePath { get; private set; } = "";
+        /// <summary>
+        /// Source path (eg: c:\mount\)
+        /// </summary>
+        public string SourcePath { get; private set; }
 
         /// <summary>
         /// Not thread safe!
@@ -62,7 +70,7 @@ namespace WinPEBuilder.Core
             Thread t = new Thread(WorkerThread);
             t.Start();
         }
-        public string ImagePath;
+      
         private void WorkerThread()
         {
             OnProgress?.Invoke(false, 0, "Setting up working directory");
@@ -100,9 +108,11 @@ namespace WinPEBuilder.Core
                 return;
             }
             var d2 = Directory.GetDirectories(WorkingDir + @"installwim\");
+            SourcePath = WorkingDir + @"installwim\";
             if (d2.Length == 0)
             {
                 int exit = MountImage(installwim, 1, WorkingDir + @"installwim");
+               
                 if (exit != 0)
                 {
                     Cleanup(false);
@@ -146,6 +156,9 @@ namespace WinPEBuilder.Core
             }
 
             //Now that we have our image and everything ready, we can now mod it
+
+            var modder = new PEModder(this);
+            modder.Run();
 
             //We are done
             Cleanup(true);
@@ -299,7 +312,7 @@ namespace WinPEBuilder.Core
             };
             startInfo.UseShellExecute = false;
             process.StartInfo = startInfo;
-            process.OutputDataReceived += (sender, e) => setLabelText(e.Data, "Mounting install.wim. ");
+            process.OutputDataReceived += (sender, e) => setLabelText(e.Data, "Mounting install.wim");
             process.Start();
             process.BeginOutputReadLine();
 
@@ -351,7 +364,7 @@ namespace WinPEBuilder.Core
                         {
 
                         }
-                        OnProgress?.Invoke(false, (int)prgval, optxt + prg + "% complete");
+                        OnProgress?.Invoke(false, (int)prgval, optxt +" "+ prg + "% complete");
                     }
                     else if (text == "The operation completed successfully.")
                     {

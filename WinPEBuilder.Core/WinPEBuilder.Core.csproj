@@ -13,4 +13,10 @@
     <PackageReference Include="DiscUtils.Vhd" Version="0.16.13" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Procmon.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
