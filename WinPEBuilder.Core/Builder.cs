@@ -11,7 +11,7 @@ namespace WinPEBuilder.Core
         private BuilderOptions Options;
         private string IsoPath;
         public static string WorkingDir = "";
-        public static string Version = "0.0.0.1";
+        public static string Version = "0.0.0.2a";
         /// <summary>
         /// Location of the new image such as Z:\
         /// </summary>
@@ -141,6 +141,7 @@ namespace WinPEBuilder.Core
                         OnProgress?.Invoke(true, 0, "Dism exited with exit code " + i + " while applying boot.wim to target");
                         return;
                     }
+                    OnProgress?.Invoke(false, 0, "Installing boot sector");
                     i = VHDInstallBootSector();
                     if (i != 0)
                     {
@@ -156,10 +157,10 @@ namespace WinPEBuilder.Core
             }
 
             //Now that we have our image and everything ready, we can now mod it
-
+            OnProgress?.Invoke(false, 0, "Modifing PE");
             var modder = new PEModder(this);
             modder.Run();
-
+            OnProgress?.Invoke(false, 0, "Unmount dest media");
             //We are done
             Cleanup(true);
 
