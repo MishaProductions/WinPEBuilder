@@ -37,8 +37,8 @@ namespace WinPEBuilder.Core
             //add various tools
             Directory.CreateDirectory(Base + "tools");
 
-            if (File.Exists("ProcMon.exe"))
-                File.Copy("ProcMon.exe", Base + "tools/procmon.exe");
+            if (File.Exists("ProcMon64.exe"))
+                File.Copy("ProcMon64.exe", Base + "tools/procmon.exe");
         }
     }
 }
