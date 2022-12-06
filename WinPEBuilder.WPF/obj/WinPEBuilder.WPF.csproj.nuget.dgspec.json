@@ -1,37 +1,37 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\pgago\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj": {}
+    "D:\\Source\\Git\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj": {}
   },
   "projects": {
-    "C:\\Users\\pgago\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj": {
+    "D:\\Source\\Git\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pgago\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj",
+        "projectUniqueName": "D:\\Source\\Git\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj",
         "projectName": "WinPEBuilder.WPF",
-        "projectPath": "C:\\Users\\pgago\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj",
-        "packagesPath": "C:\\Users\\pgago\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pgago\\WinPEBuilder\\WinPEBuilder.WPF\\obj\\",
+        "projectPath": "D:\\Source\\Git\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj",
+        "packagesPath": "C:\\Users\\Pdawg\\.nuget\\packages\\",
+        "outputPath": "D:\\Source\\Git\\WinPEBuilder\\WinPEBuilder.WPF\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\pgago\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Pdawg\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net6.0-windows"
+          "net7.0-windows"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.nuget.org/api/v2/": {}
         },
         "frameworks": {
-          "net6.0-windows7.0": {
-            "targetAlias": "net6.0-windows",
+          "net7.0-windows7.0": {
+            "targetAlias": "net7.0-windows",
             "projectReferences": {}
           }
         },
@@ -42,20 +42,16 @@
         }
       },
       "frameworks": {
-        "net6.0-windows7.0": {
-          "targetAlias": "net6.0-windows",
+        "net7.0-windows7.0": {
+          "targetAlias": "net7.0-windows",
           "dependencies": {
-            "CommunityToolkit.Mvvm": {
+            "MahApps.Metro": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[2.4.9, )"
             },
-            "Microsoft.Extensions.Hosting": {
+            "MahApps.Metro.IconPacks": {
               "target": "Package",
-              "version": "[6.0.1, )"
-            },
-            "WPF-UI": {
-              "target": "Package",
-              "version": "[2.0.3, )"
+              "version": "[4.11.0, )"
             }
           },
           "imports": [
@@ -69,24 +65,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.11, 6.0.11]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[6.0.11, 6.0.11]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.11, 6.0.11]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[6.0.11, 6.0.11]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
