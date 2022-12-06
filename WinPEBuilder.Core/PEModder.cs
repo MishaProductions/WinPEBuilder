@@ -289,7 +289,7 @@ namespace WinPEBuilder.Core
             if (File.Exists("ProcMon64.exe"))
                 File.Copy("ProcMon64.exe", Base + "tools/procmon.exe", true);
 
-            TakeOwnership(Base + "windows/system32/startnet.cmd");
+            TakeOwnership(Base + "windows/system32/startnet.cmd",false);
             File.WriteAllText(Base + "windows/system32/startnet.cmd", "@echo off\necho welcome!");
 
             SoftwareHive.SaveAndUnload();
