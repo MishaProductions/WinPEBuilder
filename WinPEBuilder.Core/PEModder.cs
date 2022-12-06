@@ -120,22 +120,61 @@ namespace WinPEBuilder.Core
             {
                 throw new ArgumentNullException(nameof(destKey));
             }
-            //sourceKey = TakeownKey(sourceKey);
 
-            //destKey = TakeownKey( destKey);
+            //set all values
             foreach (var name in sourceKey.GetValueNames())
             {
                 var type = sourceKey.GetValueKind(name);
                 var val = sourceKey.GetValue(name);
+                if (type == RegistryValueKind.String || type == RegistryValueKind.ExpandString)
+                {
+                    if (val != null)
+                        val = ((string)val).Replace(@"C:\", @"X:\");
+                    if (((string)val).Contains("C:\\"))
+                    {
+                        ;
+                    }
+                }
+                else if (type == RegistryValueKind.MultiString )
+                {
+                    string[]t= (string[])val;
+                    if (t != null)
+                    {
+                        for (int i = 0; i < t.Length; i++)
+                        {
+                            t[i] = t[i].Replace(@"C:\", @"X:\");
+                            if (t[i].Contains("C:\\"))
+                            {
+                                ;
+                            }
+                        }
+                        
+                        val = t;
+                    }
 
+                }
+                
                 destKey.SetValue(name, val, type);
             }
 
+            //set default value
             var defvalue = sourceKey?.GetValue("");
             if (defvalue != null)
             {
+                if(defvalue is string a)
+                {
+                    defvalue = a.Replace("C:\\", "X:\\");
+                } 
+                else if (defvalue is string[] t)
+                {
+                    for (int i = 0; i < t.Length; i++)
+                    {
+                        ((string[])defvalue)[i] = t[i].Replace(@"C:\", @"X:\");
+                    }
+                }
                 destKey.SetValue("", defvalue, sourceKey.GetValueKind(""));
             }
+
             //Copy subkeys
             foreach (var item in sourceKey.GetSubKeyNames())
             {
@@ -149,7 +188,7 @@ namespace WinPEBuilder.Core
                 }
                 else
                 {
-                    Debug.WriteLine("opensubkeyfailed: "+item);
+                    Debug.WriteLine("opensubkeyfailed: " + item);
                 }
             }
         }
@@ -188,7 +227,7 @@ namespace WinPEBuilder.Core
             //     SECURITY_INFORMATION.DACL_SECURITY_INFORMATION,
             //     ref sd);
             //RegCloseKey(hKey);
-            
+
             //    //throw new Exception("RegSetKeySecurity failed: " + dwRet);
             //    var h = Registry.LocalMachine.OpenSubKey(key, RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.TakeOwnership);
             //    var admins = new NTAccount("Administrators");
@@ -197,9 +236,9 @@ namespace WinPEBuilder.Core
             //    ac.AddAccessRule(new RegistryAccessRule(admins, RegistryRights.FullControl, AccessControlType.Allow));
             //    h.SetAccessControl(ac);
             //    h.Close();
-           
 
-            
+
+
 
             return Registry.LocalMachine.CreateSubKey(key, RegistryKeyPermissionCheck.ReadWriteSubTree);
         }
@@ -235,9 +274,12 @@ namespace WinPEBuilder.Core
             InstallSystemHive = RegistyManager.MountHive(SourcePath + "Windows/System32/config/System", "Install_System");
 
             Builder.ReportProgress(false, 0, "Taking ownership of registry");
-            Parallel.ForEach(new string[] {  "Tmp_Software", "Tmp_System" }, delegate(string x){
+            Parallel.ForEach(new string[] { "Tmp_Software", "Tmp_System" }, delegate (string x)
+            {
                 RunSetACL(x);
             });
+
+            Builder.ReportProgress(false, 0, "Copying Required Registry");
             CopyKey(HiveTypes.Software, "Classes");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\Explorer");
 
@@ -245,7 +287,7 @@ namespace WinPEBuilder.Core
             Directory.CreateDirectory(Base + "tools");
 
             if (File.Exists("ProcMon64.exe"))
-                File.Copy("ProcMon64.exe", Base + "tools/procmon.exe",true);
+                File.Copy("ProcMon64.exe", Base + "tools/procmon.exe", true);
 
             SoftwareHive.SaveAndUnload();
             SystemHive.SaveAndUnload();
@@ -275,7 +317,7 @@ namespace WinPEBuilder.Core
 
                 Arguments = $"-on HKLM\\{hive} -ot reg  -rec yes -actn setowner -ownr n:S-1-1-0 -silent"
             };
-            Builder.ReportProgress(false, 0, "Taking ownership of registry (hive "+hive+ "). Setting owner. This might take some time");
+            Builder.ReportProgress(false, 0, "Taking ownership of registry (hive " + hive + "). Setting owner. This might take some time");
             takeOwnProcess.EnableRaisingEvents = true;
             takeOwnProcess.StartInfo = takeOwnStartInfo;
             takeOwnProcess.OutputDataReceived += (sender, e) => Debug.WriteLine(e.Data);

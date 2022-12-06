@@ -111,7 +111,7 @@ namespace WinPEBuilder.Core
                 return;
             }
             var d2 = Directory.GetDirectories(WorkingDir + @"installwim\");
-          
+
             if (d2.Length == 0)
             {
                 int exit = MountImage(installwim, 1, WorkingDir + @"installwim");
@@ -124,7 +124,7 @@ namespace WinPEBuilder.Core
                 }
             }
             OnProgress?.Invoke(false, 0, "Creating destination media");
-       
+
             switch (Options.OutputType)
             {
                 case BuilderOptionsOutputType.VHD:
