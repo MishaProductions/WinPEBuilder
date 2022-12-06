@@ -26,6 +26,8 @@ namespace WinPEBuilder.Core
         /// </summary>
         public event BuilderEvent? OnProgress;
 
+        public event EventHandler? OnComplete;
+
         /// <summary>
         /// Builder class
         /// </summary>
@@ -70,7 +72,7 @@ namespace WinPEBuilder.Core
             Thread t = new Thread(WorkerThread);
             t.Start();
         }
-      
+
         private void WorkerThread()
         {
             OnProgress?.Invoke(false, 0, "Setting up working directory");
@@ -78,7 +80,7 @@ namespace WinPEBuilder.Core
             Directory.CreateDirectory(WorkingDir + "installwim");
             Directory.CreateDirectory(WorkingDir + "iso");
             Directory.CreateDirectory(WorkingDir + "temp");
-         
+
             OnProgress?.Invoke(false, 0, "Extracting ISO");
             //1. Extract ISO (if needed)
             //2. Extract install.wim (if needed)
@@ -112,11 +114,11 @@ namespace WinPEBuilder.Core
             if (d2.Length == 0)
             {
                 int exit = MountImage(installwim, 1, WorkingDir + @"installwim");
-               
+
                 if (exit != 0)
                 {
                     Cleanup(false);
-                    OnProgress?.Invoke(true, 0, "DISM exited with exit code "+exit+" while mounting install.wim");
+                    OnProgress?.Invoke(true, 0, "DISM exited with exit code " + exit + " while mounting install.wim");
                     return;
                 }
             }
@@ -125,7 +127,7 @@ namespace WinPEBuilder.Core
             {
                 case BuilderOptionsOutputType.VHD:
                     var i = CreateVHD(Options.Output);
-                    
+
                     if (i != 0)
                     {
                         Cleanup(false);
@@ -159,22 +161,25 @@ namespace WinPEBuilder.Core
             //Now that we have our image and everything ready, we can now mod it
             OnProgress?.Invoke(false, 0, "Modifing PE");
             var modder = new PEModder(this);
-            modder.Run();
+            var x = modder.Run();
             OnProgress?.Invoke(false, 0, "Unmount dest media");
             //We are done
-            Cleanup(true);
+            Cleanup(x);
 
         }
         private void Cleanup(bool normalExit)
         {
+            OnProgress?.Invoke(false, 0, "Cleaning up");
             if (!normalExit)
                 Debugger.Break();
+            else
+                OnComplete?.Invoke(this, new EventArgs());
             switch (Options.OutputType)
             {
                 case BuilderOptionsOutputType.VHD:
                     //unmount VHD
                     int i = UnmountVHD(Options.Output);
-                    if (i != 0&&normalExit)
+                    if (i != 0 && normalExit)
                     {
                         OnProgress?.Invoke(true, 0, "diskpart exited with exit code " + i + " while unmounting the VHD. Please unmount it via Disk Manager");
                         return;
@@ -318,7 +323,7 @@ namespace WinPEBuilder.Core
             process.BeginOutputReadLine();
 
             process.WaitForExit();
-            var exit=process.ExitCode;
+            var exit = process.ExitCode;
             process.CancelOutputRead();
             process.Close();
             return exit;
@@ -336,7 +341,7 @@ namespace WinPEBuilder.Core
             };
             startInfo.UseShellExecute = false;
             process.StartInfo = startInfo;
-            process.OutputDataReceived += (sender, e) => setLabelText(e.Data, "Applying "+Path.GetFileName(imageFile));
+            process.OutputDataReceived += (sender, e) => setLabelText(e.Data, "Applying " + Path.GetFileName(imageFile));
             process.Start();
             process.BeginOutputReadLine();
 
@@ -346,7 +351,7 @@ namespace WinPEBuilder.Core
             process.Close();
             return exit;
         }
-        private void setLabelText(string? text,string optxt)
+        private void setLabelText(string? text, string optxt)
         {
             try
             {
@@ -365,7 +370,7 @@ namespace WinPEBuilder.Core
                         {
 
                         }
-                        OnProgress?.Invoke(false, (int)prgval, optxt +" "+ prg + "% complete");
+                        OnProgress?.Invoke(false, (int)prgval, optxt + " " + prg + "% complete");
                     }
                     else if (text == "The operation completed successfully.")
                     {
@@ -436,6 +441,11 @@ namespace WinPEBuilder.Core
             {
                 AppendDirectory(Path.GetDirectoryName(path));
             }
+        }
+
+        internal void ReportProgress(bool error, int prg, string message)
+        {
+            OnProgress?.Invoke(error, prg, message);
         }
     }
 }

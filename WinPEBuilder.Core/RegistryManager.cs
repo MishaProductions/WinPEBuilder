@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -64,7 +65,7 @@ namespace WinPEBuilder.Core
                 throw new Exception("RegLoadKey Failed: " + x);
             }
             //Console.WriteLine(Marshal.GetLastWin32Error());
-            var key = result.parentKey.OpenSubKey(result.name, true);
+            var key = result.parentKey.CreateSubKey(result.name, RegistryKeyPermissionCheck.ReadWriteSubTree);
             if (key == null)
             {
                 throw new Exception("mounted key is null");
