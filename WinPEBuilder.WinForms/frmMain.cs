@@ -1,6 +1,8 @@
+using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using WinPEBuilder.Core;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WinPEBuilder.WinForms
 {
@@ -78,10 +80,23 @@ namespace WinPEBuilder.WinForms
             var builder = new Builder(options, txtIsoPath.Text, Application.StartupPath + @"work\");
 
 
-
+            builder.OnComplete += Builder_OnComplete;
             builder.OnProgress += Builder_OnProgress;
             builder.Start();
         }
+
+        private void Builder_OnComplete(object? sender, EventArgs e)
+        {
+            if (this.InvokeRequired)
+            {
+                Invoke(OnCompleteHandler);
+            }
+            else
+            {
+                OnCompleteHandler();
+            }
+        }
+
 
         private void Builder_OnProgress(bool error, int progress, string message)
         {
@@ -107,6 +122,14 @@ namespace WinPEBuilder.WinForms
                 btnBuild.Visible = true;
             }
         }
+        private void OnCompleteHandler()
+        {
+            ShowTabs();
+            tabControl1.TabPages.Remove(ProgressTab);
+            btnBuild.Visible = true;
+            MessageBox.Show("Build completed successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private void HideTabs()
         {
             tabControl1.Appearance = TabAppearance.FlatButtons;

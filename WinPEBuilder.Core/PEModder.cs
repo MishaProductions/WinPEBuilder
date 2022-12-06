@@ -238,6 +238,7 @@ namespace WinPEBuilder.Core
             Parallel.ForEach(new string[] {  "Tmp_Software", "Tmp_System" }, delegate(string x){
                 RunSetACL(x);
             });
+            CopyKey(HiveTypes.Software, "Classes");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\Explorer");
 
             //add various tools
@@ -245,7 +246,6 @@ namespace WinPEBuilder.Core
 
             if (File.Exists("ProcMon64.exe"))
                 File.Copy("ProcMon64.exe", Base + "tools/procmon.exe",true);
-            Debugger.Break();
 
             SoftwareHive.SaveAndUnload();
             SystemHive.SaveAndUnload();

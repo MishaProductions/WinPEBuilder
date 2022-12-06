@@ -65,6 +65,7 @@ namespace WinPEBuilder.Core
             this.Options = options;
             this.IsoPath = isoPath;
             Builder.WorkingDir = WorkingDir;
+            SourcePath = WorkingDir + @"installwim\";
         }
 
         public void Start()
@@ -80,7 +81,7 @@ namespace WinPEBuilder.Core
             Directory.CreateDirectory(WorkingDir + "installwim");
             Directory.CreateDirectory(WorkingDir + "iso");
             Directory.CreateDirectory(WorkingDir + "temp");
-
+            ImagePath = @"Z:\";
             OnProgress?.Invoke(false, 0, "Extracting ISO");
             //1. Extract ISO (if needed)
             //2. Extract install.wim (if needed)
@@ -110,7 +111,7 @@ namespace WinPEBuilder.Core
                 return;
             }
             var d2 = Directory.GetDirectories(WorkingDir + @"installwim\");
-            SourcePath = WorkingDir + @"installwim\";
+          
             if (d2.Length == 0)
             {
                 int exit = MountImage(installwim, 1, WorkingDir + @"installwim");
@@ -123,6 +124,7 @@ namespace WinPEBuilder.Core
                 }
             }
             OnProgress?.Invoke(false, 0, "Creating destination media");
+       
             switch (Options.OutputType)
             {
                 case BuilderOptionsOutputType.VHD:
