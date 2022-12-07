@@ -245,6 +245,13 @@ namespace WinPEBuilder.Core
                 CopyFile("Windows/System32/en-us/NetworkExplorer.dll.mui");
                 CopyFile("Windows/explorer.exe");
                 CopyFile("Windows/en-us/explorer.exe.mui");
+                CopyFile("Windows/System32/rmclient.dll");//
+                CopyFile("Windows/System32/en-US/RmClient.exe.mui");
+                CopyFile("Windows/System32/Windows.Globalization.dll");
+                CopyFile("Windows/System32/Windows.System.Launcher.dll");
+                CopyFile("Windows/System32/windowsudk.shellcommon.dll");
+                CopyFile("Windows/System32/windowsudkservices.shellcommon.dll");
+                CopyFile("Windows/System32/efswrt.dll");
 
                 if (Builder.Options.EnableFullUWPSupport)
                 {
@@ -294,9 +301,9 @@ namespace WinPEBuilder.Core
                 CopyKey(HiveTypes.Software, "Microsoft\\SecurityManager");
                 CopyKey(HiveTypes.Software, "Microsoft\\WindowsRuntime");
 
-                File.Copy(SourcePath + "Windows/system32/cmd.exe", Base + "Windows/system32/dwm.exe", true);
-                File.Copy(SourcePath + "Windows/system32/dwm.exe", Base + "Windows/system32/dwm2.exe", true);
-                File.Copy(SourcePath + "Windows/system32/en-us/dwm.exe.mui", Base + "Windows/system32/en-us/dwm2.exe.mui", true);
+             //   File.Copy(SourcePath + "Windows/system32/cmd.exe", Base + "Windows/system32/dwm.exe", true);
+              //  File.Copy(SourcePath + "Windows/system32/dwm.exe", Base + "Windows/system32/dwm2.exe", true);
+             //   File.Copy(SourcePath + "Windows/system32/en-us/dwm.exe.mui", Base + "Windows/system32/en-us/dwm2.exe.mui", true);
 
             }
 

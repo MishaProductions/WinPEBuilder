@@ -12,4 +12,8 @@
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WinPEBuilder.Core\WinPEBuilder.Core.csproj" />
+  </ItemGroup>
+
 </Project>

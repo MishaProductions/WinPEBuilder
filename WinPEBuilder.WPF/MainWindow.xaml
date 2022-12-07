@@ -24,6 +24,7 @@
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
     <Grid>
+        <TextBlock x:Name="ProgressText"></TextBlock>
         <TabControl x:Name="TabControlHeader">
             <TabItem Header="Source">
                 <Grid>
@@ -31,7 +32,7 @@
                         <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                             <TextBlock Text="Path to Windows 11 ISO:" FontSize="15" Margin="0,3,8,0"/>
                             <TextBox x:Name="ISOSourceBox" Width="250" Margin="0,0,8,0"/>
-                            <Button x:Name="FileOpen" Content="..." Width="20" Height="10"/>
+                            <Button x:Name="ISOOpen" Content="..." Width="20" Height="10" Click="ISOOpen_Click"/>
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>
@@ -52,14 +53,14 @@
             <TabItem Header="Output">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <StackPanel HorizontalAlignment="Left" Orientation="Vertical" VerticalAlignment="Top" Margin="10">
-                        <RadioButton GroupName="OutputGroup" Content="VHD Output" x:Name="VHDOutput"/>
+                        <RadioButton GroupName="OutputGroup" Content="VHD Output" x:Name="VHDOutput" IsChecked="True"/>
                         <TextBlock Text="Exports the Windows Image as a VHD." Margin="5,5,0,5"/>
                         <StackPanel Orientation="Horizontal" Margin="2,0,0,20">
                             <TextBlock Text="Output:" FontSize="11" Margin="5,5,5,0"/>
                             <TextBox x:Name="OutputVHDBox" Width="200" Margin="0,0,8,0"/>
-                            <Button x:Name="OutputVHDOpen" Width="20" Height="10" Content="..."/>
+                            <Button x:Name="OutputVHDOpen" Width="20" Height="10" Content="..." Click="OutputVHDOpen_Click"/>
                         </StackPanel>
-                        <RadioButton GroupName="OutputGroup" Content="ISO File Output" x:Name="ISOOutput"/>
+                        <RadioButton GroupName="OutputGroup" Content="ISO File Output" x:Name="ISOOutput" IsEnabled="False"/>
                         <TextBlock Text="Exports the Windows Image as a bootable ISO file. Coming soon!" Margin="5,5,0,5"/>
                     </StackPanel>
                 </ScrollViewer>

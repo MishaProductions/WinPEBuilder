@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Source\\Git\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj": {}
+    "C:\\Users\\Misha\\OneDrive\\Source\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj": {}
   },
   "projects": {
-    "D:\\Source\\Git\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj": {
+    "C:\\Users\\Misha\\OneDrive\\Source\\WinPEBuilder\\WinPEBuilder.Core\\WinPEBuilder.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Source\\Git\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj",
-        "projectName": "WinPEBuilder.WPF",
-        "projectPath": "D:\\Source\\Git\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj",
-        "packagesPath": "C:\\Users\\Pdawg\\.nuget\\packages\\",
-        "outputPath": "D:\\Source\\Git\\WinPEBuilder\\WinPEBuilder.WPF\\obj\\",
+        "projectUniqueName": "C:\\Users\\Misha\\OneDrive\\Source\\WinPEBuilder\\WinPEBuilder.Core\\WinPEBuilder.Core.csproj",
+        "projectName": "WinPEBuilder.Core",
+        "projectPath": "C:\\Users\\Misha\\OneDrive\\Source\\WinPEBuilder\\WinPEBuilder.Core\\WinPEBuilder.Core.csproj",
+        "packagesPath": "C:\\Users\\Misha\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Misha\\OneDrive\\Source\\WinPEBuilder\\WinPEBuilder.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Pdawg\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Misha\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,13 +26,97 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://www.nuget.org/api/v2/": {}
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "C:\\Users\\Misha\\AppData\\Roaming\\Cosmos User Kit\\packages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net7.0-windows7.0": {
             "targetAlias": "net7.0-windows",
             "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0-windows7.0": {
+          "targetAlias": "net7.0-windows",
+          "dependencies": {
+            "DiscUtils.Core": {
+              "target": "Package",
+              "version": "[0.16.13, )"
+            },
+            "DiscUtils.Iso9660": {
+              "target": "Package",
+              "version": "[0.16.13, )"
+            },
+            "DiscUtils.Udf": {
+              "target": "Package",
+              "version": "[0.16.13, )"
+            },
+            "DiscUtils.Vhd": {
+              "target": "Package",
+              "version": "[0.16.13, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Misha\\OneDrive\\Source\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Misha\\OneDrive\\Source\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj",
+        "projectName": "WinPEBuilder.WPF",
+        "projectPath": "C:\\Users\\Misha\\OneDrive\\Source\\WinPEBuilder\\WinPEBuilder.WPF\\WinPEBuilder.WPF.csproj",
+        "packagesPath": "C:\\Users\\Misha\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Misha\\OneDrive\\Source\\WinPEBuilder\\WinPEBuilder.WPF\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Misha\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0-windows"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "C:\\Users\\Misha\\AppData\\Roaming\\Cosmos User Kit\\packages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0-windows7.0": {
+            "targetAlias": "net7.0-windows",
+            "projectReferences": {
+              "C:\\Users\\Misha\\OneDrive\\Source\\WinPEBuilder\\WinPEBuilder.Core\\WinPEBuilder.Core.csproj": {
+                "projectPath": "C:\\Users\\Misha\\OneDrive\\Source\\WinPEBuilder\\WinPEBuilder.Core\\WinPEBuilder.Core.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
