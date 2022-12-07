@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinPEBuilder.Core", "WinPEB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinPEBuilder.WinForms", "WinPEBuilder.WinForms\WinPEBuilder.WinForms.csproj", "{29D1C9F0-F045-49AF-AE76-9E52242C1190}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinPEBuilder.WPF", "WinPEBuilder.WPF\WinPEBuilder.WPF.csproj", "{038DDCDE-E089-4020-8E82-534E28DFB890}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinPEBuilder.WPF", "WinPEBuilder.WPF\WinPEBuilder.WPF.csproj", "{A1BA46C4-0076-49FA-B33A-272EE1E538AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{29D1C9F0-F045-49AF-AE76-9E52242C1190}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29D1C9F0-F045-49AF-AE76-9E52242C1190}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29D1C9F0-F045-49AF-AE76-9E52242C1190}.Release|Any CPU.Build.0 = Release|Any CPU
-		{038DDCDE-E089-4020-8E82-534E28DFB890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{038DDCDE-E089-4020-8E82-534E28DFB890}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{038DDCDE-E089-4020-8E82-534E28DFB890}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{038DDCDE-E089-4020-8E82-534E28DFB890}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1BA46C4-0076-49FA-B33A-272EE1E538AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1BA46C4-0076-49FA-B33A-272EE1E538AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1BA46C4-0076-49FA-B33A-272EE1E538AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1BA46C4-0076-49FA-B33A-272EE1E538AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,71 @@
+﻿<mah:MetroWindow x:Class="WinPEBuilder.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WinPEBuilder.WPF" 
+        xmlns:iconPacks="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks.Modern"
+        mc:Ignorable="d"
+        Title="WinPE Builder" Height="450" Width="800"
+        >
+    <mah:MetroWindow.LeftWindowCommands>
+        <mah:WindowCommands>
+            <Button ToolTip="Open the GitHub for WinPE Builder" x:Name="GitButton" Click="GitButton_Click">
+                <iconPacks:PackIconModern Width="22" Height="22" Kind="SocialGithubOctocatSolid"/>
+            </Button>
+        </mah:WindowCommands>
+    </mah:MetroWindow.LeftWindowCommands>
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands>
+            <TextBlock Text="Build Progress:" Margin="0,6,4,0"/>
+            <mah:MetroProgressBar x:Name="BuildProgress" Width="150" Height="20" Margin="4,0,4,0" Background="DimGray" Foreground="Green"/>
+            <TextBlock Text="Version: loading..." Margin="4,6,4,0"/>
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
+    <Grid>
+        <TabControl x:Name="TabControlHeader">
+            <TabItem Header="Source">
+                <Grid>
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                            <TextBlock Text="Path to Windows 11 ISO:" FontSize="15" Margin="0,3,8,0"/>
+                            <TextBox x:Name="ISOSourceBox" Width="250" Margin="0,0,8,0"/>
+                            <Button x:Name="FileOpen" Content="..." Width="20" Height="10"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Options" Height="39" VerticalAlignment="Top">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <StackPanel HorizontalAlignment="Left" Orientation="Vertical" VerticalAlignment="Top" Margin="10">
+                        <CheckBox Content="DWM" x:Name="DWMBox" Click="DWMBox_Click"/>
+                        <CheckBox Content="UWP Support" x:Name="UWPBox" Margin="5,6,0,0" Click="UWPBox_Click"/>
+                        <CheckBox Content="LogonUI Support" x:Name="LogonUIBox" Margin="5,5,0,0" Click="LogonUIBox_Click"/>
+                        <CheckBox Content="Explorer" x:Name="ExplorerBox" Margin="5,5,0,0" Click="ExplorerBox_Click"/>
+                        <TextBlock Text="Please note that DWM is required for any other option to be enabled." Margin="5,10,0,0" TextWrapping="WrapWithOverflow"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            
+            <TabItem Header="Output">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <StackPanel HorizontalAlignment="Left" Orientation="Vertical" VerticalAlignment="Top" Margin="10">
+                        <RadioButton GroupName="OutputGroup" Content="VHD Output" x:Name="VHDOutput"/>
+                        <TextBlock Text="Exports the Windows Image as a VHD." Margin="5,5,0,5"/>
+                        <StackPanel Orientation="Horizontal" Margin="2,0,0,20">
+                            <TextBlock Text="Output:" FontSize="11" Margin="5,5,5,0"/>
+                            <TextBox x:Name="OutputVHDBox" Width="200" Margin="0,0,8,0"/>
+                            <Button x:Name="OutputVHDOpen" Width="20" Height="10" Content="..."/>
+                        </StackPanel>
+                        <RadioButton GroupName="OutputGroup" Content="ISO File Output" x:Name="ISOOutput"/>
+                        <TextBlock Text="Exports the Windows Image as a bootable ISO file. Coming soon!" Margin="5,5,0,5"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+        <Button Content="App Settings" Height="30" Width="100" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,20" x:Name="SettingsButton" Click="SettingsButton_Click"/>
+        <Button Content="Build" Height="30" Width="80" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,130,20" x:Name="BuildButton" Click="BuildButton_Click"/>
+    </Grid>
+</mah:MetroWindow>
