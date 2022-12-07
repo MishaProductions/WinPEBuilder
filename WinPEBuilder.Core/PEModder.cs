@@ -45,6 +45,11 @@ namespace WinPEBuilder.Core
         {
             if (File.Exists(SourcePath + path))
             {
+                //check if dest exists
+                if (File.Exists(Base + path))
+                {
+                    TakeOwnership(Base + path, false);
+                }
                 try
                 {
                     File.Copy(SourcePath + path, Base + path, true);
@@ -245,7 +250,7 @@ namespace WinPEBuilder.Core
                 CopyFile("Windows/System32/en-us/NetworkExplorer.dll.mui");
                 CopyFile("Windows/explorer.exe");
                 CopyFile("Windows/en-us/explorer.exe.mui");
-                CopyFile("Windows/System32/rmclient.dll");//
+                CopyFile("Windows/System32/rmclient.dll");
                 CopyFile("Windows/System32/en-US/RmClient.exe.mui");
                 CopyFile("Windows/System32/Windows.Globalization.dll");
                 CopyFile("Windows/System32/Windows.System.Launcher.dll");
@@ -306,11 +311,19 @@ namespace WinPEBuilder.Core
              //   File.Copy(SourcePath + "Windows/system32/en-us/dwm.exe.mui", Base + "Windows/system32/en-us/dwm2.exe.mui", true);
 
             }
+            if (Builder.Options.UseModernTaskmgr)
+            {
+                CopyFile("Windows/System32/en-us/Taskmgr.exe.mui");
+                CopyFile("Windows/System32/Taskmgr.exe");
 
+                CopyFile("Windows/System32/LaunchTM.exe");
+            }
 
             Builder.ReportProgress(false, 0, "Copying Required Registry");
             CopyKey(HiveTypes.Software, "Classes");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\Explorer");
+            CopyKey(HiveTypes.Software, "Microsoft\\Windows NT\\CurrentVersion\\Svchost");
+            CopyKey(HiveTypes.System, "ControlSet001\\Control\\ProductOptions");
 
             //add various tools
             Directory.CreateDirectory(Base + "tools");
@@ -506,7 +519,7 @@ namespace WinPEBuilder.Core
 
             takeOwnProcess.EnableRaisingEvents = true;
             takeOwnProcess.StartInfo = takeOwnStartInfo;
-
+            takeOwnProcess.OutputDataReceived += (sender, e) => Debug.WriteLine(e.Data);
 
             // Start the process.
             takeOwnProcess.Start();
@@ -557,6 +570,7 @@ namespace WinPEBuilder.Core
 
             grantFullControlProcess.EnableRaisingEvents = true;
             grantFullControlProcess.StartInfo = grantFullControlStartInfo;
+            grantFullControlProcess.OutputDataReceived += (sender, e) => Debug.WriteLine(e.Data);
 
             //   Logger.WriteLine("Running process: icacls " + grantFullControlStartInfo.Arguments + "\n");
 

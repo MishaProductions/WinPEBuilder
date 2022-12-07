@@ -28,6 +28,10 @@ namespace WinPEBuilder.Core
         /// </summary>
         public bool UseExplorer { get; set; } = true;
         /// <summary>
+        /// Copy modern task manager?
+        /// </summary>
+        public bool UseModernTaskmgr { get; set; } = false;
+        /// <summary>
         /// The output file
         /// </summary>
         public string Output { get; set; } = "";

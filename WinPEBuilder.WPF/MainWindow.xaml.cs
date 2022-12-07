@@ -114,6 +114,7 @@ namespace WinPEBuilder.WPF
             options.EnableFullUWPSupport = UWPBox.IsChecked == true;
             options.UseLogonUI = LogonUIBox.IsChecked == true;
             options.UseExplorer = ExplorerBox.IsChecked == true;
+            options.UseModernTaskmgr = TaskmgrBox.IsChecked == true;
             if (VHDOutput.IsChecked == true)
             {
                 options.OutputType = BuilderOptionsOutputType.VHD;

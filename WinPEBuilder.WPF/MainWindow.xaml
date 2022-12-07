@@ -45,7 +45,8 @@
                         <CheckBox Content="UWP Support" x:Name="UWPBox" Margin="5,6,0,0" Click="UWPBox_Click"/>
                         <CheckBox Content="LogonUI Support" x:Name="LogonUIBox" Margin="5,5,0,0" Click="LogonUIBox_Click"/>
                         <CheckBox Content="Explorer" x:Name="ExplorerBox" Margin="5,5,0,0" Click="ExplorerBox_Click"/>
-                        <TextBlock Text="Please note that DWM is required for any other option to be enabled." Margin="5,10,0,0" TextWrapping="WrapWithOverflow"/>
+                        <CheckBox Content="Modern Task Manager" x:Name="TaskmgrBox"/>
+                        <TextBlock Text="Please note that DWM is required for most options to be enabled." Margin="5,10,0,0" TextWrapping="WrapWithOverflow"/>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
