@@ -2,4 +2,6 @@ WinPEBuilder.Core/bin/
 WinPEBuilder.Core/obj/
 WinPEBuilder.WinForms/bin/
 WinPEBuilder.WinForms/obj/
+WinPEBuilder.Wpf/bin/
+WinPEBuilder.Wpf/obj/
 .vs/
