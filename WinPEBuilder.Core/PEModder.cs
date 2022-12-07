@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
@@ -44,7 +45,15 @@ namespace WinPEBuilder.Core
         {
             if (File.Exists(SourcePath + path))
             {
-                File.Copy(SourcePath + path, Base + path, true);
+                try
+                {
+                    File.Copy(SourcePath + path, Base + path, true);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("error while copying file: " + ex.ToString());
+                }
+
             }
             else
             {
@@ -84,7 +93,7 @@ namespace WinPEBuilder.Core
                 return;
             }
 
-            var sourceKey = source.RootKey.CreateSubKey(key, RegistryKeyPermissionCheck.ReadWriteSubTree);
+            var sourceKey = source.RootKey.OpenSubKey(key);
             if (sourceKey == null)
             {
                 Debug.WriteLine("source key is null: " + key);
@@ -130,30 +139,20 @@ namespace WinPEBuilder.Core
                 {
                     if (val != null)
                         val = ((string)val).Replace(@"C:\", @"X:\");
-                    if (((string)val).Contains("C:\\"))
-                    {
-                        ;
-                    }
                 }
-                else if (type == RegistryValueKind.MultiString )
+                else if (type == RegistryValueKind.MultiString)
                 {
-                    string[]t= (string[])val;
+                    string[] t = (string[])val;
                     if (t != null)
                     {
                         for (int i = 0; i < t.Length; i++)
                         {
                             t[i] = t[i].Replace(@"C:\", @"X:\");
-                            if (t[i].Contains("C:\\"))
-                            {
-                                ;
-                            }
                         }
-                        
                         val = t;
                     }
-
                 }
-                
+
                 destKey.SetValue(name, val, type);
             }
 
@@ -161,10 +160,10 @@ namespace WinPEBuilder.Core
             var defvalue = sourceKey?.GetValue("");
             if (defvalue != null)
             {
-                if(defvalue is string a)
+                if (defvalue is string a)
                 {
                     defvalue = a.Replace("C:\\", "X:\\");
-                } 
+                }
                 else if (defvalue is string[] t)
                 {
                     for (int i = 0; i < t.Length; i++)
@@ -192,64 +191,8 @@ namespace WinPEBuilder.Core
                 }
             }
         }
-
-        private RegistryKey TakeownKey(string key)
-        {
-            //NTAccount ntAccount = new NTAccount("Administrators");
-            //string sSid = ntAccount.Translate(typeof(SecurityIdentifier)).Value;
-
-            //IntPtr pSid;
-            //ConvertStringSidToSid(sSid, out pSid);
-            //IntPtr hKey = IntPtr.Zero;
-            //uint dwErr = RegOpenKeyEx((IntPtr)HKEY_LOCAL_MACHINE, key, 0, KEY_WOW64_64KEY | WRITE_OWNER, ref hKey);
-            //if (dwErr != 0) { throw new Exception("RegOpenKeyEx failed: " + dwErr); }
-
-            //uint dwRet = SetSecurityInfo(hKey,
-            //      SE_OBJECT_TYPE.SE_REGISTRY_KEY,
-            //      OWNER_SECURITY_INFORMATION,
-            //      pSid,
-            //      IntPtr.Zero,
-            //      IntPtr.Zero,
-            //      IntPtr.Zero);
-            //if (dwRet != 0)
-            //{
-            //    throw new Exception("SetSecurityInfo failed: " + dwRet);
-            //}
-            //RegCloseKey(hKey);
-            //dwErr = RegOpenKeyEx((IntPtr)HKEY_LOCAL_MACHINE, key, 0, KEY_WOW64_64KEY | WRITE_OWNER | WRITE_DAC, ref hKey);
-            //if (dwErr != 0) { throw new Exception("RegOpenKeyEx failed: " + dwErr); }
-
-            //SECURITY_DESCRIPTOR sd = new SECURITY_DESCRIPTOR();
-
-            //var x = ConvertStringSecurityDescriptorToSecurityDescriptor("D:(A;OICI;GA;;;WD)(A;OICI;GA;;;SY)", 1, out sd, out ulong size);
-
-            //dwRet = (uint)RegSetKeySecurity(hKey,
-            //     SECURITY_INFORMATION.DACL_SECURITY_INFORMATION,
-            //     ref sd);
-            //RegCloseKey(hKey);
-
-            //    //throw new Exception("RegSetKeySecurity failed: " + dwRet);
-            //    var h = Registry.LocalMachine.OpenSubKey(key, RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.TakeOwnership);
-            //    var admins = new NTAccount("Administrators");
-            //    var ac = h.GetAccessControl();
-            //    ac.SetOwner(admins);
-            //    ac.AddAccessRule(new RegistryAccessRule(admins, RegistryRights.FullControl, AccessControlType.Allow));
-            //    h.SetAccessControl(ac);
-            //    h.Close();
-
-
-
-
-            return Registry.LocalMachine.CreateSubKey(key, RegistryKeyPermissionCheck.ReadWriteSubTree);
-        }
-
-        private RegistryKey TakeownKey(RegistryKey subKey)
-        {
-            return TakeownKey(subKey.ToString().Replace("HKEY_LOCAL_MACHINE\\", ""));
-        }
         public bool Run()
         {
-
             //needed for modern explorer
             CopyFile("Windows/System32/shellstyle.dll");
             Directory.CreateDirectory(Base + "Windows/Resources/Themes/Aero/Shell/");
@@ -262,8 +205,13 @@ namespace WinPEBuilder.Core
             CopyFile("Windows/System32/atlthunk.dll");
             CopyFile("Windows/System32/policymanager.dll");
             CopyFile("Windows/System32/MrmCoreR.dll");
+            CopyFile("Windows/System32/ActXPrxy.dll");
+            CopyFile("Windows/System32/explorerframe.dll");
+            CopyFile("Windows/System32/thumbcache.dll");
+            CopyFile("Windows/System32/en-us/explorerframe.dll.mui");
             CopyFile("Windows/SystemResources/imageres.dll.mun");
-
+            CopyFile("Windows/SystemResources/explorerframe.dll.mun");
+            FixBlackScreen();
             //takeown config folder (required)
             TakeOwnership(SourcePath + "Windows/System32/config/", true);
 
@@ -279,6 +227,80 @@ namespace WinPEBuilder.Core
                 RunSetACL(x);
             });
 
+           
+            if (Builder.Options.UseExplorer)
+            {
+                CopyFile("Windows/System32/twinapi.dll");
+                CopyFile("Windows/System32/en-us/twinapi.dll.mui");
+                CopyFile("Windows/System32/twinapi.appcore.dll");
+                CopyFile("Windows/System32/en-us/twinapi.appcore.dll.mui");
+
+                CopyFile("Windows/System32/twinui.dll");
+                CopyFile("Windows/System32/en-us/twinui.dll.mui");
+                CopyFile("Windows/System32/twinui.appcore.dll");
+                CopyFile("Windows/System32/en-us/twinui.appcore.dll.mui");
+
+                CopyFile("Windows/System32/cscui.dll");
+                CopyFile("Windows/System32/NetworkExplorer.dll");
+                CopyFile("Windows/System32/en-us/NetworkExplorer.dll.mui");
+                CopyFile("Windows/explorer.exe");
+                CopyFile("Windows/en-us/explorer.exe.mui");
+
+                if (Builder.Options.EnableFullUWPSupport)
+                {
+
+                }
+            }
+            if (Builder.Options.UseDWM)
+            {
+                CopyFile("Windows/System32/dwm.exe");
+                CopyFile("Windows/System32/uDWM.dll");
+                CopyFile("Windows/System32/en-us/dwm.dll.mui");
+                CopyFile("Windows/System32/en-us/uDWM.dll.mui");
+                CopyFile("Windows/System32/en-us/dwminit.dll.mui");
+                CopyFile("Windows/System32/dwmscene.dll");
+                CopyFile("Windows/System32/dwmredir.dll");
+                CopyFile("Windows/System32/dwminit.dll");
+                CopyFile("Windows/System32/dwmcore.dll");
+                CopyFile("Windows/System32/dwmapi.dll");
+                CopyFile("Windows/System32/dcomp.dll");
+                CopyFile("Windows/System32/ism.dll");
+                CopyFile("Windows/System32/dxgi.dll");
+                CopyFile("Windows/System32/D3DCOMPILER_47.dll");
+                CopyFile("Windows/System32/dxcore.dll");
+                CopyFile("Windows/System32/d3d10warp.dll");
+                CopyFile("Windows/System32/directxdatabasehelper.dll");
+                CopyFile("Windows/System32/ResourcePolicyClient.dll");
+                CopyFile("Windows/System32/gameinput.dll");
+                CopyFile("Windows/System32/windows.applicationmodel.dll");
+                CopyFile("Windows/System32/d3d11.dll");
+                CopyFile("Windows/System32/WindowManagement.dll");
+                CopyFile("Windows/System32/windowmanagementapi.dll");
+                CopyFile("Windows/System32/wuceffects.dll");
+                CopyFile("Windows/apppatch/DirectXApps.sdb");
+                CopyFile("Windows/apppatch/DirectXApps_FOD.sdb");
+                CopyFile("Windows/System32/Windows.gaming.input.dll");
+                CopyFile("Windows/System32/DispBroker.Desktop.dll");
+                CopyFile("Windows/System32/DispBrokerDesktop.dll");
+                CopyFile("Windows/System32/DispBroker.dll");
+                CopyFile("Windows/System32/GameInputRedist.dll");
+                CopyFile("Windows/System32/dwmghost.dll");
+                CopyFile("Windows/System32/InputHost.dll");
+                CopyFile("Windows/System32/Windows.Graphics.dll");
+                CopyFile("Windows/System32/OneCoreUAPCommonProxyStub.dll");
+                CopyFile("Windows/System32/UIAutomationCore.dll");
+                CopyFile("Windows/System32/UIAnimation.dll");
+                CopyKey(HiveTypes.Software, "Microsoft\\Windows\\Dwm");
+                CopyKey(HiveTypes.Software, "Microsoft\\SecurityManager");
+                CopyKey(HiveTypes.Software, "Microsoft\\WindowsRuntime");
+
+                File.Copy(SourcePath + "Windows/system32/cmd.exe", Base + "Windows/system32/dwm.exe", true);
+                File.Copy(SourcePath + "Windows/system32/dwm.exe", Base + "Windows/system32/dwm2.exe", true);
+                File.Copy(SourcePath + "Windows/system32/en-us/dwm.exe.mui", Base + "Windows/system32/en-us/dwm2.exe.mui", true);
+
+            }
+
+
             Builder.ReportProgress(false, 0, "Copying Required Registry");
             CopyKey(HiveTypes.Software, "Classes");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\Explorer");
@@ -289,7 +311,7 @@ namespace WinPEBuilder.Core
             if (File.Exists("ProcMon64.exe"))
                 File.Copy("ProcMon64.exe", Base + "tools/procmon.exe", true);
 
-            TakeOwnership(Base + "windows/system32/startnet.cmd",false);
+            TakeOwnership(Base + "windows/system32/startnet.cmd", false);
             File.WriteAllText(Base + "windows/system32/startnet.cmd", "@echo off\necho welcome!");
 
             SoftwareHive.SaveAndUnload();
@@ -298,7 +320,55 @@ namespace WinPEBuilder.Core
             InstallSoftwareHive.SaveAndUnload();
             InstallSystemHive.SaveAndUnload();
             return true;
+            
+        }
+        private bool FixBlackScreen()
+        {
+            //From Win10XPE
+            Process takeOwnProcess = new();
+            ProcessStartInfo takeOwnStartInfo = new()
+            {
+                FileName = "SetACL.exe",
 
+                // Do not write error output to standard stream.
+                RedirectStandardError = true,
+                // Do not write output to Process.StandardOutput Stream.
+                RedirectStandardOutput = true,
+                // Do not read input from Process.StandardInput (i/e; the keyboard).
+                RedirectStandardInput = false,
+
+                UseShellExecute = false,
+                // Do not show a command window.
+                CreateNoWindow = true,
+
+                Arguments = $"-ot file -on \"{Base.Replace(@"\",@"\\")}\" -actn ace -actn setprot -op \"dacl:p_nc\" -ace n:S-1-1-0;p:full -silent"
+            };
+            Builder.ReportProgress(false, 0, "Taking ownership of files. Setting owner. This might take some time");
+            takeOwnProcess.EnableRaisingEvents = true;
+            takeOwnProcess.StartInfo = takeOwnStartInfo;
+            takeOwnProcess.OutputDataReceived += (sender, e) => Debug.WriteLine(e.Data);
+
+            // Start the process.
+            takeOwnProcess.Start();
+            takeOwnProcess.BeginOutputReadLine();
+            takeOwnProcess.BeginErrorReadLine();
+            // Wait for the process to exit.
+            takeOwnProcess.WaitForExit();
+
+            int exitCode = takeOwnProcess.ExitCode;
+            bool takeOwnSuccessful = true;
+
+            // Now we need to see if the process was successful.
+            if (exitCode > 0 & !takeOwnProcess.HasExited)
+            {
+                takeOwnProcess.Kill();
+                takeOwnSuccessful = false;
+            }
+
+            // Now clean up after ourselves.
+            takeOwnProcess.Dispose();
+
+            return takeOwnSuccessful;
         }
         private bool RunSetACL(string hive)
         {

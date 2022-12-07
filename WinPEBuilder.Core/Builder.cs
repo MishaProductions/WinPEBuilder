@@ -8,7 +8,7 @@ namespace WinPEBuilder.Core
 {
     public class Builder
     {
-        private BuilderOptions Options;
+        public BuilderOptions Options { get; private set; }
         private string IsoPath;
         public static string WorkingDir = "";
         public static string Version = "0.0.0.2a";
@@ -111,7 +111,7 @@ namespace WinPEBuilder.Core
                 return;
             }
             var d2 = Directory.GetDirectories(WorkingDir + @"installwim\");
-
+          
             if (d2.Length == 0)
             {
                 int exit = MountImage(installwim, 1, WorkingDir + @"installwim");
@@ -124,7 +124,7 @@ namespace WinPEBuilder.Core
                 }
             }
             OnProgress?.Invoke(false, 0, "Creating destination media");
-
+       
             switch (Options.OutputType)
             {
                 case BuilderOptionsOutputType.VHD:
@@ -271,7 +271,7 @@ namespace WinPEBuilder.Core
             else
             {
                 //create new vhd
-                script += $"create vdisk file=\"{isoPath}\" maximum=2000\n";
+                script += $"create vdisk file=\"{isoPath}\" maximum=3000\n";
             }
 
             //mount vhd
@@ -281,7 +281,7 @@ namespace WinPEBuilder.Core
             script += $"clean\n";
 
             //create main partition
-            script += $"create partition primary size=1500\n";
+            script += $"create partition primary size=2500\n";
             script += $"format fs=ntfs label=\"OSIMAGE\" quick\n";
             script += $"assign letter=z\n";
             script += $"active\n";
