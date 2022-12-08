@@ -238,7 +238,7 @@ namespace WinPEBuilder.Core
             InstallSystemHive = RegistyManager.MountHive(SourcePath + "Windows/System32/config/System", "Install_System");
 
             Builder.ReportProgress(false, 0, "Taking ownership of registry");
-            Parallel.ForEach(new string[] { "Tmp_Software", "Tmp_System" }, delegate (string x)
+            Parallel.ForEach(new string[] { "Install_Software", "Install_System", "Tmp_Software", "Tmp_System" }, delegate (string x)
             {
                 RunSetACL(x);
             });
