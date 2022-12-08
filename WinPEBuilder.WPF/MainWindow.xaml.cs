@@ -43,7 +43,6 @@ namespace WinPEBuilder.WPF
         {
             Process.Start("explorer", "https://github.com/MishaTY/WinPEBuilder/");
         }
-
         private void DWMBox_Click(object sender, RoutedEventArgs e)
         {
             if (DWMBox.IsChecked == true)
@@ -51,7 +50,6 @@ namespace WinPEBuilder.WPF
                 UWPBox.IsEnabled = true;
                 LogonUIBox.IsEnabled = true;
                 ExplorerBox.IsEnabled = true;
-                // Port backend event
             }
             else
             {
@@ -61,43 +59,6 @@ namespace WinPEBuilder.WPF
                 UWPBox.IsChecked = false;
                 LogonUIBox.IsChecked = false;
                 ExplorerBox.IsChecked = false;
-                // Port backend event
-            }
-        }
-
-        private void UWPBox_Click(object sender, RoutedEventArgs e)
-        {
-            if (UWPBox.IsChecked == true)
-            {
-                // Port backend event
-            }
-            else
-            {
-                // Port opposite backend event
-            }
-        }
-
-        private void LogonUIBox_Click(object sender, RoutedEventArgs e)
-        {
-            if (LogonUIBox.IsChecked == true)
-            {
-                // Port backend event
-            }
-            else
-            {
-                // Port opposite backend event
-            }
-        }
-
-        private void ExplorerBox_Click(object sender, RoutedEventArgs e)
-        {
-            if (ExplorerBox.IsChecked == true)
-            {
-                // Port backend event
-            }
-            else
-            {
-                // Port opposite backend event
             }
         }
 
