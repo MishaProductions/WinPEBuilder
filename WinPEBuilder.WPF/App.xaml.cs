@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using ControlzEx.Theming;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace WinPEBuilder.WPF
 {
@@ -20,7 +21,7 @@ namespace WinPEBuilder.WPF
         {
             base.OnStartup(e);
 
-            // Set the application theme to Dark.Green
+            // Set the application theme
             ThemeManager.Current.ChangeTheme(this, "Dark.Purple");
         }
     }
