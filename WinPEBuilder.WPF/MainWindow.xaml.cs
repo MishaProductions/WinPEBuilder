@@ -30,6 +30,13 @@ namespace WinPEBuilder.WPF
             UWPBox.IsEnabled = false;
             LogonUIBox.IsEnabled = false;
             ExplorerBox.IsEnabled = false;
+
+            if (Debugger.IsAttached && Environment.UserName.ToLower() == "misha")
+            {
+                //Debug code
+                ISOSourceBox.Text = @"D:\1Misha\Downloads\25252.1010_amd64_en-us_professional_0ec350c5_convert\25252.1010.221122-1933.RS_PRERELEASE_FLT_CLIENTPRO_OEMRET_X64FRE_EN-US.ISO";
+                OutputVHDBox.Text = @"D:\winpegen.vhd";
+            }
         }
 
         private void GitButton_Click(object sender, RoutedEventArgs e)
