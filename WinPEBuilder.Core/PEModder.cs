@@ -290,7 +290,21 @@ namespace WinPEBuilder.Core
                 CopyFile("Windows/System32/searchfolder.dll");
                 CopyFile("Windows/System32/OEMDefaultAssociations.dll");
                 CopyFile("Windows/System32/themeui.dll");
+                CopyFile("Windows/System32/amsi.dll");
+                CopyFile("Windows/System32/sscoreext.dll");
+                CopyFile("Windows/System32/Windows.StateRepositoryPS.dll");
+                CopyFile("Windows/System32/Windows.StateRepositoryUpgrade.dll");
+                CopyFile("Windows/System32/TileDataRepository.dll");
+                CopyFile("Windows/System32/twinui.pcshell.dll");
+                CopyFile("Windows/System32/Windows.UI.Immersive.dll");
+                CopyFile("Windows/System32/SndVolSSO.dll");
+                CopyFile("Windows/System32/shimgvw.dll");
+                CopyFile("Windows/System32/FirewallControlPanel.dll");
+                CopyFile("Windows/System32/wpnapps.dll");
+                CopyFile("Windows/System32/usodocked.dll");
+                CopyFile("Windows/System32/Windows.Management.Workplace.dll");
                 CopyService("StateRepository");
+                Directory.CreateDirectory(Base + "ProgramData/Microsoft/Windows/AppRepository");
                 if (Builder.Options.EnableFullUWPSupport)
                 {
                    
@@ -348,24 +362,36 @@ namespace WinPEBuilder.Core
             {
                 CopyFile("Windows/System32/en-us/Taskmgr.exe.mui");
                 CopyFile("Windows/System32/Taskmgr.exe");
-
+                CopyFile("Windows/System32/chartv.dll");
+                CopyFile("Windows/System32/D3DSCache.dll");
+                CopyFile("Windows/System32/NetworkUXBroker.dll");
+                CopyFile("Windows/System32/WlanMediaManager.dll");
+                CopyFile("Windows/System32/srumapi.dll");
+                CopyFile("Windows/System32/dxilconv.dll");
                 CopyFile("Windows/System32/LaunchTM.exe");
+                CopyFile("Windows/SystemResources/Taskmgr.exe.mun");
+                CopyFile("Windows/System32/pdh.dll");
             }
 
             Builder.ReportProgress(false, 0, "Copying Required Registry");
             CopyKey(HiveTypes.Software, "Classes");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\Explorer");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\AppModel");
-            CopyKey(HiveTypes.Software, "Microsoft\\XAML");
+            
             CopyKey(HiveTypes.Software, "Microsoft\\AppModel");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows NT\\CurrentVersion\\Svchost");
             CopyKey(HiveTypes.System, "ControlSet001\\Control\\ProductOptions");
+            CopyKey(HiveTypes.System, "ControlSet001\\Control\\FeatureManagement");
+            CopyKey(HiveTypes.System, "ControlSet001\\Policies\\Microsoft\\FeatureManagement");
 
             //add various tools
             Directory.CreateDirectory(Base + "tools");
 
             if (File.Exists("ProcMon64.exe"))
-                File.Copy("ProcMon64.exe", Base + "tools/procmon.exe", true);
+                File.Copy("ProcMon64.exe", Base + "tools/ProcMon64.exe", true);
+            Directory.CreateDirectory(Base + "tools/windbg/");
+            if (Directory.Exists("windbg"))
+                CopyFilesRecursively("windbg", Base + "tools/windbg/");
 
             TakeOwnership(Base + "windows/system32/startnet.cmd", false);
             File.WriteAllText(Base + "windows/system32/startnet.cmd", "@echo off\necho welcome!");
@@ -376,7 +402,23 @@ namespace WinPEBuilder.Core
             InstallSoftwareHive.SaveAndUnload();
             InstallSystemHive.SaveAndUnload();
             return true;
-            
+
+        }
+        public static void CopyFilesRecursively(string sourcepath, string targetpath)
+        {
+            var source = new DirectoryInfo(sourcepath);
+            var target = new DirectoryInfo(targetpath);
+            foreach (DirectoryInfo dir in source.GetDirectories())
+                CopyFilesRecursively(dir, target.CreateSubdirectory(dir.Name));
+            foreach (FileInfo file in source.GetFiles())
+                file.CopyTo(Path.Combine(target.FullName, file.Name));
+        }
+        public static void CopyFilesRecursively(DirectoryInfo source, DirectoryInfo target)
+        {
+            foreach (DirectoryInfo dir in source.GetDirectories())
+                CopyFilesRecursively(dir, target.CreateSubdirectory(dir.Name));
+            foreach (FileInfo file in source.GetFiles())
+                file.CopyTo(Path.Combine(target.FullName, file.Name));
         }
         private bool FixBlackScreen()
         {
@@ -524,10 +566,39 @@ namespace WinPEBuilder.Core
         }
         private void TakeOwnership(string path, bool recursive)
         {
-            _ = TakeOwnership2(path, recursive);
-            _ = GrantFullControl(path, "Administrators", recursive);
-            _ = GrantFullControl(path, "SYSTEM", recursive);
-            _ = GrantFullControl(path, "Everyone", recursive);
+            if (recursive)
+            {
+                _ = TakeOwnership2(path, recursive);
+                _ = GrantFullControl(path, "Administrators", recursive);
+                _ = GrantFullControl(path, "SYSTEM", recursive);
+                _ = GrantFullControl(path, "Everyone", recursive);
+            }
+            else
+            {
+                var i = new FileInfo(path);
+                var fs = i.GetAccessControl();
+                bool ownerChanged = false;
+                bool accessChanged = false;
+                bool isDelete = false;
+                try
+                {
+                    fs.SetOwner(WindowsIdentity.GetCurrent().User);
+                    i.SetAccessControl(fs); //Update the Access Control on the File
+                    ownerChanged = true;
+                }
+                catch (PrivilegeNotHeldException ex) { }
+                finally {  }
+
+                try
+                {
+                    fs.SetAccessRule(new FileSystemAccessRule(WindowsIdentity.GetCurrent().User, FileSystemRights.FullControl, AccessControlType.Allow));
+                    i.SetAccessControl(fs);
+                    accessChanged = true;
+                }
+                catch (UnauthorizedAccessException ex) { }
+                Console.WriteLine("ownerchanged:" + ownerChanged + ",accesschanged:" + accessChanged);
+            }
+
         }
         public static bool TakeOwnership2(string fileName, bool recursive)
         {
