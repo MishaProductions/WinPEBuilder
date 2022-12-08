@@ -257,6 +257,21 @@ namespace WinPEBuilder.Core
                 CopyFile("Windows/System32/windowsudk.shellcommon.dll");
                 CopyFile("Windows/System32/windowsudkservices.shellcommon.dll");
                 CopyFile("Windows/System32/efswrt.dll");
+                CopyFile("Windows/System32/taskschd.dll");
+                CopyFile("Windows/System32/Windows.UI.dll");
+                CopyFile("Windows/System32/Windows.UI.XAML.dll");
+                CopyFile("Windows/System32/Windows.StateRepositoryClient.dll");
+                CopyFile("Windows/System32/Windows.StateRepositoryCore.dll");
+                CopyFile("Windows/System32/IDStore.dll");
+                CopyFile("Windows/System32/appresolver.dll");
+                CopyFile("Windows/System32/desk.cpl");
+                CopyFile("Windows/System32/control.exe");
+                CopyFile("Windows/System32/WinLangdb.dll");
+                CopyFile("Windows/System32/StartTileData.dll");
+                CopyFile("Windows/System32/mydocs.dll");
+                CopyFile("Windows/System32/Windows.Storage.Search.dll");
+                CopyFile("Windows/System32/CloudExperienceHostCommon.dll");
+                CopyFile("Windows/System32/TaskFlowDataEngine.dll");
 
                 if (Builder.Options.EnableFullUWPSupport)
                 {

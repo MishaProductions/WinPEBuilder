@@ -120,6 +120,8 @@ namespace WinPEBuilder.WPF
             if (error)
             {
                 ProgressText.Text = "";
+                TabControlHeader.Visibility = Visibility.Visible;
+                this.ShowMessageAsync("Build Error", message);
             }
             else
             {
