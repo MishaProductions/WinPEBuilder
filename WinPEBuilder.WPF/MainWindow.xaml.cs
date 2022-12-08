@@ -19,11 +19,13 @@ using Microsoft.Win32;
 using WinPEBuilder.Core;
 using System.Windows.Threading;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using ControlzEx.Theming;
 
 namespace WinPEBuilder.WPF
 {
     public partial class MainWindow : MetroWindow
     {
+
         public MainWindow()
         {
             InitializeComponent();
@@ -33,11 +35,20 @@ namespace WinPEBuilder.WPF
             VersionText.Text = "Version: " + Builder.Version;
             if (Debugger.IsAttached && Environment.UserName.ToLower() == "misha")
             {
-                //Debug code
+                //Debug code for Misha
                 ISOSourceBox.Text = @"D:\1Misha\Downloads\25252.1010_amd64_en-us_professional_0ec350c5_convert\25252.1010.221122-1933.RS_PRERELEASE_FLT_CLIENTPRO_OEMRET_X64FRE_EN-US.ISO";
                 OutputVHDBox.Text = @"C:\winpegen.vhd";
             }
+            if (Debugger.IsAttached && Environment.UserName.ToLower() == "pdawg")
+            {
+                // Debug code for Pdawg
+                ISOSourceBox.Text = @"D:\Other\win11pebuilder\Win11_22H2_English_x64v1.iso";
+                OutputVHDBox.Text = @"D:\Other\win11pebuilder\winpegen.vhd";
+            }
         }
+
+        public static string Themes;
+        public static string ColorTheme;
 
         private void GitButton_Click(object sender, RoutedEventArgs e)
         {
@@ -75,7 +86,6 @@ namespace WinPEBuilder.WPF
                 return;
             }
 
-            TabControlHeader.Visibility = Visibility.Collapsed;
             //create options
             var options = new BuilderOptions();
             options.UseDWM = DWMBox.IsChecked == true;
@@ -95,6 +105,7 @@ namespace WinPEBuilder.WPF
 
             var builder = new Builder(options, ISOSourceBox.Text, System.AppDomain.CurrentDomain.BaseDirectory + @"work\");
 
+            BuildButton.IsEnabled = false;
 
             builder.OnComplete += Builder_OnComplete;
             builder.OnProgress += Builder_OnProgress;
@@ -122,6 +133,7 @@ namespace WinPEBuilder.WPF
                 ProgressText.Text = "";
                 TabControlHeader.Visibility = Visibility.Visible;
                 this.ShowMessageAsync("Build Error", message);
+                BuildButton.IsEnabled = true;
             }
             else
             {
@@ -133,10 +145,35 @@ namespace WinPEBuilder.WPF
         {
             ProgressText.Text = "";
             TabControlHeader.Visibility = Visibility.Visible;
+            BuildButton.IsEnabled = true;
         }
-        private async void SettingsButton_Click(object sender, RoutedEventArgs e)
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Pdawg: I've got the settings, you just work on backend :)
+            SettingsDialog settingDialog = new SettingsDialog();
+            if (settingDialog.ShowDialog() == true)
+            {
+                if (Themes == "Dark" && ColorTheme != null)
+                {
+                    ThemeManager.Current.ChangeTheme(this, "Dark." + ColorTheme);
+                    SettingsDialog.SettingLocalTheme = "Dark";
+                }
+                else if (Themes == "Light" && ColorTheme != null)
+                {
+                    ThemeManager.Current.ChangeTheme(this, "Light." + ColorTheme);
+                    SettingsDialog.SettingLocalTheme = "Light";
+                }
+                else if (Themes == "Dark" && ColorTheme == null)
+                {
+                    ThemeManager.Current.ChangeTheme(this, "Dark.Purple");
+                    SettingsDialog.SettingLocalTheme = "Dark";
+                }
+                else if (Themes == "Light" && ColorTheme == null)
+                {
+                    ThemeManager.Current.ChangeTheme(this, "Light.Purple");
+                    SettingsDialog.SettingLocalTheme = "Light";
+                }
+            };
+
         }
 
         private void ISOOpen_Click(object sender, RoutedEventArgs e)

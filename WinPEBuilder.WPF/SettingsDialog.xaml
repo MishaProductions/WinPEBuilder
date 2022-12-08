@@ -1,0 +1,31 @@
+﻿<mah:MetroWindow x:Class="WinPEBuilder.WPF.SettingsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WinPEBuilder.WPF"
+        mc:Ignorable="d"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        Title="Settings" Height="190" Width="300">
+    <Grid>
+        <Button x:Name="SaveBtn" Content="Save" HorizontalAlignment="Right" Width="60" Height="20" VerticalAlignment="Bottom" Click="SaveBtn_Click" Margin="10"/>
+        <Button x:Name="CancelBtn" Content="Cancel" HorizontalAlignment="Right" Width="60" Height="20" VerticalAlignment="Bottom" Click="CancelBtn_Click" Margin="0,0,80,10"/>
+        <StackPanel HorizontalAlignment="Left" Margin="20">
+            <TextBlock Text="Theme" Margin="0,0,0,6"/>
+            <ComboBox x:Name="ThemeComboBox" Width="100" SelectionChanged="ThemeComboBox_SelectionChanged">
+                <ComboBoxItem Content="Dark" x:Name="DarkSelection"/>
+                <ComboBoxItem Content="Light" x:Name="LightSelection"/>
+            </ComboBox>
+            <TextBlock Text="Color" Margin="0,10,0,6"/>
+            <ComboBox x:Name="ColorComboBox" Width="100" SelectionChanged="ColorComboBox_SelectionChanged">
+                <ComboBoxItem Content="Pink"/>
+                <ComboBoxItem Content="Purple"/>
+                <ComboBoxItem Content="Blue"/>
+                <ComboBoxItem Content="Green"/>
+                <ComboBoxItem Content="Yellow"/>
+                <ComboBoxItem Content="Orange"/>
+                <ComboBoxItem Content="Red"/>
+            </ComboBox>
+        </StackPanel>
+    </Grid>
+</mah:MetroWindow>

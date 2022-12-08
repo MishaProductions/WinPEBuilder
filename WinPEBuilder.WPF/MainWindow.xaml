@@ -18,14 +18,13 @@
     </mah:MetroWindow.LeftWindowCommands>
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
-            <TextBlock Text="Build Progress:" Margin="0,6,4,0"/>
+            <TextBlock Text="Operation Progress:" Margin="0,6,4,0"/>
             <mah:MetroProgressBar x:Name="BuildProgress" Width="150" Height="20" Margin="4,0,4,0" Background="DimGray" Foreground="Green"/>
             <TextBlock x:Name="VersionText" Text="Version: loading..." Margin="4,6,4,0"/>
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
     <Grid>
-        <TextBlock x:Name="ProgressText" FontSize="32"></TextBlock>
-        <TabControl x:Name="TabControlHeader">
+        <TabControl x:Name="TabControlHeader" Margin="0,0,0,60">
             <TabItem Header="Source">
                 <Grid>
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
@@ -50,7 +49,7 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            
+
             <TabItem Header="Output">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <StackPanel HorizontalAlignment="Left" Orientation="Vertical" VerticalAlignment="Top" Margin="10">
@@ -69,5 +68,6 @@
         </TabControl>
         <Button Content="App Settings" Height="30" Width="100" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,20" x:Name="SettingsButton" Click="SettingsButton_Click"/>
         <Button Content="Build" Height="30" Width="80" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,130,20" x:Name="BuildButton" Click="BuildButton_Click"/>
+        <TextBlock x:Name="ProgressText" FontSize="20" VerticalAlignment="Bottom" Margin="10,0,0,22" HorizontalAlignment="Left" MaxWidth="560" TextWrapping="WrapWithOverflow"/>
     </Grid>
 </mah:MetroWindow>
