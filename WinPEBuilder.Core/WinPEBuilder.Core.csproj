@@ -1,28 +1,46 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0-windows</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="DiscUtils.Core" Version="0.16.13" />
-    <PackageReference Include="DiscUtils.Iso9660" Version="0.16.13" />
-    <PackageReference Include="DiscUtils.Udf" Version="0.16.13" />
-    <PackageReference Include="DiscUtils.Vhd" Version="0.16.13" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="DiscUtils.Core" Version="0.16.13" />
+		<PackageReference Include="DiscUtils.Iso9660" Version="0.16.13" />
+		<PackageReference Include="DiscUtils.Udf" Version="0.16.13" />
+		<PackageReference Include="DiscUtils.Vhd" Version="0.16.13" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="Procmon.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Procmon64.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SetACL.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="EULA-AutoIt3.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="penetworkLicense.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PENetwork.exe">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PENetwork.ini">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PENetwork_en-US.lng">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Procmon.exe">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Procmon64.exe">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="SetACL.exe">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="windbg/**">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

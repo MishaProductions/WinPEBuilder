@@ -223,10 +223,13 @@ namespace WinPEBuilder.Core
             CopyFile("Windows/System32/MrmCoreR.dll");
             CopyFile("Windows/System32/ActXPrxy.dll");
             CopyFile("Windows/System32/explorerframe.dll");
+            CopyFile("Windows/System32/taskkill.exe");
+            CopyFile("Windows/System32/en-us/taskkill.exe.mui");
             CopyFile("Windows/System32/thumbcache.dll");
             CopyFile("Windows/System32/en-us/explorerframe.dll.mui");
             CopyFile("Windows/SystemResources/imageres.dll.mun");
             CopyFile("Windows/SystemResources/explorerframe.dll.mun");
+            CopyFile("Windows/fonts/segoeui.ttf");
             FixBlackScreen();
             //takeown config folder (required)
             TakeOwnership(SourcePath + "Windows/System32/config/", true);
@@ -242,8 +245,8 @@ namespace WinPEBuilder.Core
             {
                 RunSetACL(x);
             });
+            Builder.ReportProgress(false, 0, "Copying needed files");
 
-           
             if (Builder.Options.UseExplorer)
             {
                 CopyFile("Windows/System32/twinapi.dll");
@@ -288,6 +291,7 @@ namespace WinPEBuilder.Core
                 CopyFile("Windows/System32/Windows.CloudStore.dll");
                 CopyFile("Windows/System32/mstask.dll");
                 CopyFile("Windows/System32/searchfolder.dll");
+                CopyFile("Windows/System32/en-us/searchfolder.dll.mui");
                 CopyFile("Windows/System32/OEMDefaultAssociations.dll");
                 CopyFile("Windows/System32/themeui.dll");
                 CopyFile("Windows/System32/amsi.dll");
@@ -303,12 +307,31 @@ namespace WinPEBuilder.Core
                 CopyFile("Windows/System32/wpnapps.dll");
                 CopyFile("Windows/System32/usodocked.dll");
                 CopyFile("Windows/System32/Windows.Management.Workplace.dll");
+                CopyFile("Windows/System32/wcmapi.dll");
+                CopyFile("Windows/System32/windows.immersiveshell.serviceprovider.dll");
+                CopyFile("Windows/System32/networkitemfactory.dll");
+                CopyFile("Windows/System32/dtsh.dll");
+                CopyFile("Windows/System32/en-us/dtsh.dll.mui");
+                CopyFile("Windows/System32/StructuredQuery.dll");
+                CopyFile("Windows/System32/ndfapi.dll");
+                CopyFile("Windows/System32/wdi.dll");
+                CopyFile("Windows/System32/fundisc.dll");
+
                 CopyService("StateRepository");
                 Directory.CreateDirectory(Base + "ProgramData/Microsoft/Windows/AppRepository");
+                CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\AppX");
                 if (Builder.Options.EnableFullUWPSupport)
                 {
                    
                 }
+            }
+            if (Builder.Options.UseLogonUI)
+            {
+                CopyFile("Windows/System32/Windows.UI.Logon.dll");
+                CopyFile("Windows/System32/Windows.UI.XamlHost.dll");
+                CopyFile("Windows/System32/shaact.dll");
+                File.Copy(SourcePath + "Windows/system32/cmd.exe", Base + "Windows/system32/LogonUI.exe", true);
+                File.Copy(SourcePath + "Windows/system32/LogonUI.exe", Base + "Windows/system32/LogonUI2.exe", true);
             }
             if (Builder.Options.UseDWM)
             {
@@ -352,10 +375,9 @@ namespace WinPEBuilder.Core
                 CopyKey(HiveTypes.Software, "Microsoft\\Windows\\Dwm");
                 CopyKey(HiveTypes.Software, "Microsoft\\SecurityManager");
                 CopyKey(HiveTypes.Software, "Microsoft\\WindowsRuntime");
-
-             //   File.Copy(SourcePath + "Windows/system32/cmd.exe", Base + "Windows/system32/dwm.exe", true);
-              //  File.Copy(SourcePath + "Windows/system32/dwm.exe", Base + "Windows/system32/dwm2.exe", true);
-             //   File.Copy(SourcePath + "Windows/system32/en-us/dwm.exe.mui", Base + "Windows/system32/en-us/dwm2.exe.mui", true);
+                //   File.Copy(SourcePath + "Windows/system32/cmd.exe", Base + "Windows/system32/dwm.exe", true);
+                //  File.Copy(SourcePath + "Windows/system32/dwm.exe", Base + "Windows/system32/dwm2.exe", true);
+                //   File.Copy(SourcePath + "Windows/system32/en-us/dwm.exe.mui", Base + "Windows/system32/en-us/dwm2.exe.mui", true);
 
             }
             if (Builder.Options.UseModernTaskmgr)
@@ -377,9 +399,13 @@ namespace WinPEBuilder.Core
             CopyKey(HiveTypes.Software, "Classes");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\Explorer");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\AppModel");
-            
+            CopyKey(HiveTypes.Software, "Microsoft\\COM3");
+
+            CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\SharedPC");
+
             CopyKey(HiveTypes.Software, "Microsoft\\AppModel");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows NT\\CurrentVersion\\Svchost");
+            CopyKey(HiveTypes.Software, "Microsoft\\SQMClient");
             CopyKey(HiveTypes.System, "ControlSet001\\Control\\ProductOptions");
             CopyKey(HiveTypes.System, "ControlSet001\\Control\\FeatureManagement");
             CopyKey(HiveTypes.System, "ControlSet001\\Policies\\Microsoft\\FeatureManagement");
@@ -389,6 +415,12 @@ namespace WinPEBuilder.Core
 
             if (File.Exists("ProcMon64.exe"))
                 File.Copy("ProcMon64.exe", Base + "tools/ProcMon64.exe", true);
+            if (File.Exists("PENetwork.exe"))
+                File.Copy("PENetwork.exe", Base + "tools/PENetwork.exe", true);
+            if (File.Exists("PENetwork.ini"))
+                File.Copy("PENetwork.ini", Base + "tools/PENetwork.ini", true);
+            if (File.Exists("PENetwork_en-US.lng"))
+                File.Copy("PENetwork_en-US.lng", Base + "tools/PENetwork_en-US.lng", true);
             Directory.CreateDirectory(Base + "tools/windbg/");
             if (Directory.Exists("windbg"))
                 CopyFilesRecursively("windbg", Base + "tools/windbg/");

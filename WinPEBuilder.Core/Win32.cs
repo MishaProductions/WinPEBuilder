@@ -11,7 +11,6 @@
             if (!TokenManipulator.AddPrivilege("SeRestorePrivilege")) throw new Exception();
             if (!TokenManipulator.AddPrivilege("SeBackupPrivilege")) throw new Exception();
             if (!TokenManipulator.AddPrivilege("SeTakeOwnershipPrivilege")) throw new Exception();
-
         }
     }
 }
