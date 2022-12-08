@@ -196,6 +196,17 @@ namespace WinPEBuilder.Core
                 }
             }
         }
+        public void CopyService(string name)
+        {
+            try
+            {
+                CopyKey(HiveTypes.System, "ControlSet001\\Services\\" + name);
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine("copy service error: "+ex.ToString());
+            }
+        }
         public bool Run()
         {
             //needed for modern explorer
@@ -262,6 +273,8 @@ namespace WinPEBuilder.Core
                 CopyFile("Windows/System32/Windows.UI.XAML.dll");
                 CopyFile("Windows/System32/Windows.StateRepositoryClient.dll");
                 CopyFile("Windows/System32/Windows.StateRepositoryCore.dll");
+                CopyFile("Windows/System32/StateRepository.Core.dll");
+                CopyFile("Windows/System32/Windows.StateRepository.dll");
                 CopyFile("Windows/System32/IDStore.dll");
                 CopyFile("Windows/System32/appresolver.dll");
                 CopyFile("Windows/System32/desk.cpl");
@@ -272,10 +285,15 @@ namespace WinPEBuilder.Core
                 CopyFile("Windows/System32/Windows.Storage.Search.dll");
                 CopyFile("Windows/System32/CloudExperienceHostCommon.dll");
                 CopyFile("Windows/System32/TaskFlowDataEngine.dll");
-
+                CopyFile("Windows/System32/Windows.CloudStore.dll");
+                CopyFile("Windows/System32/mstask.dll");
+                CopyFile("Windows/System32/searchfolder.dll");
+                CopyFile("Windows/System32/OEMDefaultAssociations.dll");
+                CopyFile("Windows/System32/themeui.dll");
+                CopyService("StateRepository");
                 if (Builder.Options.EnableFullUWPSupport)
                 {
-
+                   
                 }
             }
             if (Builder.Options.UseDWM)
@@ -337,6 +355,9 @@ namespace WinPEBuilder.Core
             Builder.ReportProgress(false, 0, "Copying Required Registry");
             CopyKey(HiveTypes.Software, "Classes");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\Explorer");
+            CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\AppModel");
+            CopyKey(HiveTypes.Software, "Microsoft\\XAML");
+            CopyKey(HiveTypes.Software, "Microsoft\\AppModel");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows NT\\CurrentVersion\\Svchost");
             CopyKey(HiveTypes.System, "ControlSet001\\Control\\ProductOptions");
 

@@ -20,7 +20,7 @@
         <mah:WindowCommands>
             <TextBlock Text="Build Progress:" Margin="0,6,4,0"/>
             <mah:MetroProgressBar x:Name="BuildProgress" Width="150" Height="20" Margin="4,0,4,0" Background="DimGray" Foreground="Green"/>
-            <TextBlock Text="Version: loading..." Margin="4,6,4,0"/>
+            <TextBlock x:Name="VersionText" Text="Version: loading..." Margin="4,6,4,0"/>
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
     <Grid>
