@@ -43,7 +43,7 @@ namespace WinPEBuilder.WPF
             };
 
             this.DialogResult = true;
-            string saveConfigName = "configuration.json";
+            string saveConfigName = "Usersconfiguration.json";
             FileStream createStream = File.Create(saveConfigName);
             var options = new JsonSerializerOptions { WriteIndented = true };
             await JsonSerializer.SerializeAsync(createStream, saveConfigObject, options);
