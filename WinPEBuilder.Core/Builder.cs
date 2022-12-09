@@ -11,7 +11,7 @@ namespace WinPEBuilder.Core
         public BuilderOptions Options { get; private set; }
         private string IsoPath;
         public static string WorkingDir = "";
-        public static string Version = "0.0.0.2a";
+        public static string Version = "0.0.0.3a";
         /// <summary>
         /// Location of the new image such as Z:\
         /// </summary>
