@@ -48,8 +48,6 @@ namespace WinPEBuilder.WPF
             var options = new JsonSerializerOptions { WriteIndented = true };
             await JsonSerializer.SerializeAsync(createStream, saveConfigObject, options);
             await createStream.DisposeAsync();
-
-            Debug.WriteLine(File.ReadAllText(saveConfigName));
         }
 
         private void ThemeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -68,6 +68,6 @@
         </TabControl>
         <Button Content="App Settings" Height="30" Width="100" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,20" x:Name="SettingsButton" Click="SettingsButton_Click"/>
         <Button Content="Build" Height="30" Width="80" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,130,20" x:Name="BuildButton" Click="BuildButton_Click"/>
-        <TextBlock x:Name="ProgressText" FontSize="20" VerticalAlignment="Bottom" Margin="10,0,0,22" HorizontalAlignment="Left" MaxWidth="560" TextWrapping="WrapWithOverflow"/>
+        <TextBlock x:Name="ProgressText" FontSize="20" VerticalAlignment="Bottom" Margin="22" HorizontalAlignment="Left" MaxWidth="560" TextWrapping="WrapWithOverflow"/>
     </Grid>
 </mah:MetroWindow>
