@@ -81,15 +81,55 @@ namespace WinPEBuilder.Core.Plugins
             modder.CopyFile("Windows/System32/en-us/dtsh.dll.mui");
             modder.CopyFile("Windows/System32/StructuredQuery.dll");
             modder.CopyFile("Windows/System32/ndfapi.dll");
+            modder.CopyFile("Windows/System32/en-us/ndfapi.dll.mui");
             modder.CopyFile("Windows/System32/wdi.dll");
             modder.CopyFile("Windows/System32/fundisc.dll");
             modder.CopyFile("Windows/System32/clbcatq.dll");
+            modder.CopyFile("Windows/System32/ClipSVC.dll");
+            modder.CopyFile("Windows/System32/WpnService.dll");
+            modder.CopyFile("Windows/System32/appextension.dll");
+            modder.CopyFile("Windows/System32/WpnUserService.dll");
+            modder.CopyFile("Windows/System32/Windows.UI.FileExplorer.dll");
+            modder.CopyFile("Windows/System32/cldapi.dll");
+            modder.CopyFile("Windows/System32/EhStorShell.dll");
+            modder.CopyFile("Windows/System32/mycomput.dll");
+            modder.CopyFile("Windows/System32/combase.dll"); //??
+            modder.CopyFile("Windows/System32/en-us/mycomput.dll.mui");
             modder.CopyFile("Windows/SysWOW64/propsys.dll");
+            modder.CopyFile("Windows/System32/AssignedAccessManager.dll");
+            modder.CopyFile("Windows/System32/CapabilityAccessManager.dll");
+            modder.CopyFile("Windows/System32/Clipc.dll");
+            modder.CopyFile("Windows/System32/slwga.dll");
+            modder.CopyFile("Windows/System32/WaaSAssessment.dll");
+            modder.CopyFile("Windows/System32/Windows.ApplicationModel.Store.Preview.DOSettings.dll");
+            modder.CopyFile("Windows/System32/WwaApi.dll");
+            modder.CopyFile("Windows/System32/Windows.Media.Speech.dll");
+            modder.CopyFile("Windows/System32/mdmcommon.dll");
+            modder.CopyFile("Windows/System32/wlidprov.dll");
+            modder.CopyFile("Windows/System32/wpncore.dll");
+            modder.CopyFile("Windows/System32/netprofm.dll");
 
+
+            //sihost needs these
+            modder.CopyFile("Windows/System32/Windows.Shell.ServiceHostBuilder.dll");
+            modder.CopyFile("Windows/System32/DesktopShellExt.dll");
+            modder.CopyFile("Windows/System32/ClipboardServer.dll");
+            modder.CopyFile("Windows/System32/ActivationManager.dll");
+            modder.CopyFile("Windows/System32/modernexecserver.dll");
+            modder.CopyService("camsvc");
+            modder.CopyService("WpnService");
+            modder.CopyService("WpnUserService");
             modder.CopyService("StateRepository");
+            modder.CopyService("ClipSVC");
             Directory.CreateDirectory(modder.Base + "ProgramData/Microsoft/Windows/AppRepository");
             modder.CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\AppX");
+            modder.CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager");
+            modder.CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\AppReadiness");
+            modder.CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\AppModelUnlock");
+            modder.CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\ActionCenter");
+            modder.CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\ApplicationFrame");
             modder.CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\ShellCompatibility");
+            modder.CopyKey(HiveTypes.System, "ControlSet001\\Services\\CoreUI");
         }
     }
 }

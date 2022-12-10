@@ -16,5 +16,6 @@ namespace WinPEBuilder.Core.Plugins
         public static readonly Guid LogonUI = new Guid("87a6a9ce-0336-451d-ab74-a6085dd97a54");
         public static readonly Guid ModernTaskmgr = new Guid("c8d848f1-abba-418e-b18f-864143c214cb");
         public static readonly Guid FullUWPSupport = new Guid("8fb9200b-71ae-441e-a6d5-dcf2dd7ad722");
+        public static readonly Guid MMCSupport = new Guid("67006eb3-8496-4244-ac8c-fffc188c5d6b");
     }
 }
