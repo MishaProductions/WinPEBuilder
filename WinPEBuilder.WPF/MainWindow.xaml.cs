@@ -37,7 +37,7 @@ namespace WinPEBuilder.WPF
             if (Debugger.IsAttached && Environment.UserName.ToLower() == "misha")
             {
                 //Debug code for Misha
-                ISOSourceBox.Text = @"D:\1Misha\Downloads\25252.1010_amd64_en-us_professional_0ec350c5_convert\25252.1010.221122-1933.RS_PRERELEASE_FLT_CLIENTPRO_OEMRET_X64FRE_EN-US.ISO";
+                ISOSourceBox.Text = @"C:\Users\Misha\Downloads\25262.1000_amd64_en-us_professional_5f0aec65_convert\25262.1000.221205-1627.RS_PRERELEASE_CLIENTPRO_OEMRET_X64FRE_EN-US.ISO";
                 OutputVHDBox.Text = @"C:\winpegen.vhd";
             }
             if (Debugger.IsAttached && Environment.UserName.ToLower() == "pdawg")
