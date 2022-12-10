@@ -54,10 +54,10 @@ namespace WinPEBuilder.Core.Plugins
             //enable verbose logon
             if (modder.SoftwareHive != null)
             {
-                RegistryKey? key = modder.SoftwareHive.RootKey.OpenSubKey("Microsoft\\Windows\\CurrentVersion\\Policies\\System");
+                RegistryKey? key = modder.SoftwareHive.RootKey.CreateSubKey("Microsoft\\Windows\\CurrentVersion\\Policies\\System");
                 if (key != null)
                 {
-                    key.SetValue("verbosestatus", 1, RegistryValueKind.DWord);
+                     key.SetValue("verbosestatus", 1, RegistryValueKind.DWord);
                     key.Close();
                 }
                 else
