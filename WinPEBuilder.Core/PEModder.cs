@@ -14,6 +14,9 @@ using static WinPEBuilder.Core.PEModder;
 
 namespace WinPEBuilder.Core
 {
+    /// <summary>
+    /// This class actually modifies things
+    /// </summary>
     public class PEModder
     {
         /// <summary>
@@ -122,7 +125,6 @@ namespace WinPEBuilder.Core
             sourceKey.Close();
             destKey.Close();
         }
-
         private void CopyKeyInternal(RegistryKey sourceKey, RegistryKey destKey)
         {
             if (sourceKey is null)
@@ -611,14 +613,13 @@ namespace WinPEBuilder.Core
                 var fs = i.GetAccessControl();
                 bool ownerChanged = false;
                 bool accessChanged = false;
-                bool isDelete = false;
                 try
                 {
                     fs.SetOwner(WindowsIdentity.GetCurrent().User);
                     i.SetAccessControl(fs); //Update the Access Control on the File
                     ownerChanged = true;
                 }
-                catch (PrivilegeNotHeldException ex) { }
+                catch (PrivilegeNotHeldException) { }
                 finally {  }
 
                 try
@@ -627,7 +628,7 @@ namespace WinPEBuilder.Core
                     i.SetAccessControl(fs);
                     accessChanged = true;
                 }
-                catch (UnauthorizedAccessException ex) { }
+                catch (UnauthorizedAccessException) { }
                 Console.WriteLine("ownerchanged:" + ownerChanged + ",accesschanged:" + accessChanged);
             }
 
@@ -711,7 +712,7 @@ namespace WinPEBuilder.Core
             grantFullControlProcess.StartInfo = grantFullControlStartInfo;
             grantFullControlProcess.OutputDataReceived += (sender, e) => Debug.WriteLine(e.Data);
 
-            //   Logger.WriteLine("Running process: icacls " + grantFullControlStartInfo.Arguments + "\n");
+            //Logger.WriteLine("Running process: icacls " + grantFullControlStartInfo.Arguments + "\n");
 
             // Start the process.
             grantFullControlProcess.Start();

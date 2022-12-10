@@ -111,7 +111,7 @@ namespace WinPEBuilder.Core
                 return;
             }
             var d2 = Directory.GetDirectories(WorkingDir + @"installwim\");
-          
+
             if (d2.Length == 0)
             {
                 int exit = MountImage(installwim, 1, WorkingDir + @"installwim");
@@ -124,7 +124,7 @@ namespace WinPEBuilder.Core
                 }
             }
             OnProgress?.Invoke(false, 0, "Creating destination media");
-       
+
             switch (Options.OutputType)
             {
                 case BuilderOptionsOutputType.VHD:
@@ -164,10 +164,10 @@ namespace WinPEBuilder.Core
             OnProgress?.Invoke(false, 0, "Modifing PE");
             var modder = new PEModder(this);
             var x = modder.Run();
-            OnProgress?.Invoke(false, 0, "Unmount dest media");
+            OnProgress?.Invoke(false, 0, "Unmount destination media");
+
             //We are done
             Cleanup(x);
-
         }
         private void Cleanup(bool normalExit)
         {
@@ -195,8 +195,8 @@ namespace WinPEBuilder.Core
         }
         private int VHDInstallBootSector()
         {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 UseShellExecute = true,
                 CreateNoWindow = true,
@@ -309,8 +309,8 @@ namespace WinPEBuilder.Core
 
         public int MountImage(string imageFile, int imageIndex, string mountdir)
         {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 UseShellExecute = true,
                 CreateNoWindow = true,
@@ -332,8 +332,8 @@ namespace WinPEBuilder.Core
         }
         public int ApplyImage(string imageFile, int imageIndex, string applydir)
         {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 UseShellExecute = true,
                 CreateNoWindow = true,
@@ -428,6 +428,8 @@ namespace WinPEBuilder.Core
         }
         static void AppendDirectory(string path)
         {
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
             try
             {
                 if (!Directory.Exists(path))
@@ -435,11 +437,11 @@ namespace WinPEBuilder.Core
                     Directory.CreateDirectory(path);
                 }
             }
-            catch (DirectoryNotFoundException Ex)
+            catch (DirectoryNotFoundException)
             {
                 AppendDirectory(Path.GetDirectoryName(path));
             }
-            catch (PathTooLongException Exx)
+            catch (PathTooLongException)
             {
                 AppendDirectory(Path.GetDirectoryName(path));
             }

@@ -25,7 +25,8 @@ namespace WinPEBuilder.WPF
 {
     public partial class MainWindow : MetroWindow
     {
-
+        public static string Themes = "";
+        public static string ColorTheme = "";
         public MainWindow()
         {
             InitializeComponent();
@@ -46,9 +47,6 @@ namespace WinPEBuilder.WPF
                 OutputVHDBox.Text = @"D:\Other\win11pebuilder\winpegen.vhd";
             }
         }
-
-        public static string Themes;
-        public static string ColorTheme;
 
         private void GitButton_Click(object sender, RoutedEventArgs e)
         {
