@@ -39,12 +39,7 @@
 
             <TabItem Header="Options" Height="39" VerticalAlignment="Top">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <StackPanel HorizontalAlignment="Left" Orientation="Vertical" VerticalAlignment="Top" Margin="10">
-                        <CheckBox Content="Modern Task Manager" x:Name="TaskmgrBox" IsChecked="True"/>
-                        <CheckBox Content="DWM" x:Name="DWMBox" Click="DWMBox_Click" IsChecked="True"/>
-                        <CheckBox Content="UWP Support" x:Name="UWPBox" Margin="5,6,0,0" IsChecked="True"/>
-                        <CheckBox Content="LogonUI Support" x:Name="LogonUIBox" Margin="5,5,0,0" IsChecked="True"/>
-                        <CheckBox Content="Explorer" x:Name="ExplorerBox" Margin="5,5,0,0" IsChecked="True"/>
+                    <StackPanel x:Name="PluginsList" HorizontalAlignment="Left" Orientation="Vertical" VerticalAlignment="Top" Margin="10">
                         <TextBlock Text="Please note that DWM is required for most options to be enabled." Margin="5,10,0,0" TextWrapping="WrapWithOverflow"/>
                     </StackPanel>
                 </ScrollViewer>

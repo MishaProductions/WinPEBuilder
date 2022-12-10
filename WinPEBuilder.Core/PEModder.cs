@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
@@ -33,7 +34,7 @@ namespace WinPEBuilder.Core
         public Hive? InstallSoftwareHive;
         public Hive? InstallSystemHive;
         public Builder Builder { get; private set; }
-        public static UIntPtr HKEY_LOCAL_MACHINE = new UIntPtr(0x80000002u);
+        internal static UIntPtr HKEY_LOCAL_MACHINE = new UIntPtr(0x80000002u);
         public PEModder(Builder builder)
         {
             Base = builder.ImagePath;
@@ -59,13 +60,13 @@ namespace WinPEBuilder.Core
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("Error while copying file: " + ex.ToString());
+                    LogEvent("Error while copying file: " + ex.ToString());
                 }
 
             }
             else
             {
-                Debug.WriteLine("filenotfound: " + path);
+                LogEvent("filenotfound: " + path);
             }
         }
         /// <summary>
@@ -104,7 +105,7 @@ namespace WinPEBuilder.Core
             var sourceKey = source.RootKey.OpenSubKey(key);
             if (sourceKey == null)
             {
-                Debug.WriteLine("source key is null: " + key);
+                LogEvent("Warning: Source key is null: " + key);
                 Debugger.Break();
                 return;
             }
@@ -115,7 +116,7 @@ namespace WinPEBuilder.Core
                 destKey = dest.RootKey.CreateSubKey(key, RegistryKeyPermissionCheck.ReadWriteSubTree);
                 if (destKey == null)
                 {
-                    Debug.WriteLine("Failed to create key: " + key);
+                    LogEvent("Warning: Failed to create key: " + key);
                     Debugger.Break();
                     return;
                 }
@@ -194,7 +195,7 @@ namespace WinPEBuilder.Core
                 }
                 else
                 {
-                    Debug.WriteLine("opensubkeyfailed: " + item);
+                    LogEvent("Warning: Opensubkeyfailed: " + item);
                 }
             }
         }
@@ -209,17 +210,17 @@ namespace WinPEBuilder.Core
                 }
                 try
                 {
-                    CopyFilesRecursively(SourcePath + path, Base + path);
+                    CopyDirectory(SourcePath + path, Base + path);
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("Error while copying file: " + ex.ToString());
+                    LogEvent("Error while copying file: " + ex.ToString());
                 }
 
             }
             else
             {
-                Debug.WriteLine("dir not found: " + path);
+                LogEvent("warning: Directory to copy not found: " + path);
             }
         }
         public void CopyService(string name)
@@ -230,10 +231,10 @@ namespace WinPEBuilder.Core
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("copy service error: " + ex.ToString());
+                LogEvent("Warning: copy service error: " + ex.ToString());
             }
         }
-        public bool Run()
+        internal bool Run()
         {
             //needed for modern explorer
             CopyFile("Windows/System32/shellstyle.dll");
@@ -274,177 +275,8 @@ namespace WinPEBuilder.Core
             });
             Builder.ReportProgress(false, 0, "Copying needed files");
             CopyService("TrustedInstaller");
-            if (Builder.Options.UseExplorer)
-            {
-                CopyFile("Windows/System32/twinapi.dll");
-                CopyFile("Windows/System32/en-us/twinapi.dll.mui");
-                CopyFile("Windows/System32/twinapi.appcore.dll");
-                CopyFile("Windows/System32/en-us/twinapi.appcore.dll.mui");
+            
 
-                CopyFile("Windows/System32/twinui.dll");
-                CopyFile("Windows/System32/en-us/twinui.dll.mui");
-                CopyFile("Windows/System32/twinui.appcore.dll");
-                CopyFile("Windows/System32/en-us/twinui.appcore.dll.mui");
-
-                CopyFile("Windows/System32/cscui.dll");
-                CopyFile("Windows/System32/NetworkExplorer.dll");
-                CopyFile("Windows/System32/en-us/NetworkExplorer.dll.mui");
-                CopyFile("Windows/explorer.exe");
-                CopyFile("Windows/en-us/explorer.exe.mui");
-                CopyFile("Windows/System32/rmclient.dll");
-                CopyFile("Windows/System32/en-US/RmClient.exe.mui");
-                CopyFile("Windows/System32/Windows.Globalization.dll");
-                CopyFile("Windows/System32/Windows.System.Launcher.dll");
-                CopyFile("Windows/System32/windowsudk.shellcommon.dll");
-                CopyFile("Windows/System32/windowsudkservices.shellcommon.dll");
-                CopyFile("Windows/System32/efswrt.dll");
-                CopyFile("Windows/System32/taskschd.dll");
-                CopyFile("Windows/System32/Windows.UI.dll");
-                CopyFile("Windows/System32/Windows.UI.XAML.dll");
-                CopyFile("Windows/System32/Windows.StateRepositoryClient.dll");
-                CopyFile("Windows/System32/Windows.StateRepositoryCore.dll");
-                CopyFile("Windows/System32/StateRepository.Core.dll");
-                CopyFile("Windows/System32/Windows.StateRepository.dll");
-                CopyFile("Windows/System32/IDStore.dll");
-                CopyFile("Windows/System32/appresolver.dll");
-                CopyFile("Windows/System32/desk.cpl");
-                CopyFile("Windows/System32/control.exe");
-                CopyFile("Windows/System32/WinLangdb.dll");
-                CopyFile("Windows/System32/StartTileData.dll");
-                CopyFile("Windows/System32/mydocs.dll");
-                CopyFile("Windows/System32/Windows.Storage.Search.dll");
-                CopyFile("Windows/System32/CloudExperienceHostCommon.dll");
-                CopyFile("Windows/System32/TaskFlowDataEngine.dll");
-                CopyFile("Windows/System32/Windows.CloudStore.dll");
-                CopyFile("Windows/System32/mstask.dll");
-                CopyFile("Windows/System32/searchfolder.dll");
-                CopyFile("Windows/System32/en-us/searchfolder.dll.mui");
-                CopyFile("Windows/System32/OEMDefaultAssociations.dll");
-                CopyFile("Windows/System32/themeui.dll");
-                CopyFile("Windows/System32/amsi.dll");
-                CopyFile("Windows/System32/sscoreext.dll");
-                CopyFile("Windows/System32/Windows.StateRepositoryPS.dll");
-                CopyFile("Windows/System32/Windows.StateRepositoryUpgrade.dll");
-                CopyFile("Windows/System32/TileDataRepository.dll");
-                CopyFile("Windows/System32/twinui.pcshell.dll");
-                CopyFile("Windows/System32/Windows.UI.Immersive.dll");
-                CopyFile("Windows/System32/SndVolSSO.dll");
-                CopyFile("Windows/System32/shimgvw.dll");
-                CopyFile("Windows/System32/FirewallControlPanel.dll");
-                CopyFile("Windows/System32/wpnapps.dll");
-                CopyFile("Windows/System32/usodocked.dll");
-                CopyFile("Windows/System32/Windows.Management.Workplace.dll");
-                CopyFile("Windows/System32/wcmapi.dll");
-                CopyFile("Windows/System32/windows.immersiveshell.serviceprovider.dll");
-                CopyFile("Windows/System32/networkitemfactory.dll");
-                CopyFile("Windows/System32/dtsh.dll");
-                CopyFile("Windows/System32/en-us/dtsh.dll.mui");
-                CopyFile("Windows/System32/StructuredQuery.dll");
-                CopyFile("Windows/System32/ndfapi.dll");
-                CopyFile("Windows/System32/wdi.dll");
-                CopyFile("Windows/System32/fundisc.dll");
-                CopyFile("Windows/System32/clbcatq.dll");
-                CopyFile("Windows/SysWOW64/propsys.dll");
-
-                CopyService("StateRepository");
-                Directory.CreateDirectory(Base + "ProgramData/Microsoft/Windows/AppRepository");
-                CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\AppX");
-                CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\ShellCompatibility");
-                if (Builder.Options.EnableFullUWPSupport)
-                {
-
-                }
-            }
-            if (Builder.Options.UseLogonUI)
-            {
-                CopyFile("Windows/System32/Windows.UI.Logon.dll");
-                CopyFile("Windows/System32/Windows.UI.XamlHost.dll");
-                CopyFile("Windows/System32/Windows.UI.Xaml.Controls.dll");
-                CopyFile("Windows/System32/Windows.UI.Xaml.Resources.21h1.dll");
-                CopyFile("Windows/System32/Windows.UI.Xaml.Phone.dll");
-                CopyFile("Windows/System32/Windows.UI.Xaml.Maps.dll");
-                CopyFile("Windows/System32/Windows.UI.Xaml.InkControls.dll");
-                CopyFile("Windows/System32/Windows.UI.Xaml.Resources.Common.dll");
-                CopyFile("Windows/System32/FontGlyphAnimator.dll");
-                CopyFile("Windows/System32/NetworkIcon.dll");
-                CopyFile("Windows/System32/shacct.dll");
-                CopyFile("Windows/System32/LanguageOverlayUtil.dll");
-                CopyFile("Windows/System32/threadpoolwinrt.dll");
-                CopyFile("Windows/System32/Windows.Devices.Sensors.dll");
-                CopyFile("Windows/System32/InputSwitch.dll");
-                CopyFile("Windows/System32/pfclient.dll");
-                CopyFile("Windows/System32/globinputhost.dll");
-                CopyFile("Windows/System32/Windows.UI.BioFeedback.dll");
-                CopyFile("Windows/System32/en-us/Windows.UI.Xaml.dll.mui");
-                File.Copy(SourcePath + "Windows/system32/cmd.exe", Base + "Windows/system32/LogonUI.exe", true);
-                File.Copy(SourcePath + "Windows/system32/LogonUI.exe", Base + "Windows/system32/LogonUI2.exe", true);
-
-                CopyDir("Windows/SystemApps/Microsoft.LockApp_cw5n1h2txyewy/");
-                CopyDir("Windows/SystemResources/Windows.UI.Logon/");
-                CopyDir("Windows/SystemResources/Windows.UI.BioFeedback/");
-                CopyDir("ProgramData/Microsoft/User Account Pictures/");
-            }
-            if (Builder.Options.UseDWM)
-            {
-                CopyFile("Windows/System32/dwm.exe");
-                CopyFile("Windows/System32/uDWM.dll");
-                CopyFile("Windows/System32/en-us/dwm.dll.mui");
-                CopyFile("Windows/System32/en-us/uDWM.dll.mui");
-                CopyFile("Windows/System32/en-us/dwminit.dll.mui");
-                CopyFile("Windows/System32/dwmscene.dll");
-                CopyFile("Windows/System32/dwmredir.dll");
-                CopyFile("Windows/System32/dwminit.dll");
-                CopyFile("Windows/System32/dwmcore.dll");
-                CopyFile("Windows/System32/dwmapi.dll");
-                CopyFile("Windows/System32/dcomp.dll");
-                CopyFile("Windows/System32/ism.dll");
-                CopyFile("Windows/System32/dxgi.dll");
-                CopyFile("Windows/System32/D3DCOMPILER_47.dll");
-                CopyFile("Windows/System32/dxcore.dll");
-                CopyFile("Windows/System32/d3d10warp.dll");
-                CopyFile("Windows/System32/directxdatabasehelper.dll");
-                CopyFile("Windows/System32/ResourcePolicyClient.dll");
-                CopyFile("Windows/System32/gameinput.dll");
-                CopyFile("Windows/System32/windows.applicationmodel.dll");
-                CopyFile("Windows/System32/d3d11.dll");
-                CopyFile("Windows/System32/WindowManagement.dll");
-                CopyFile("Windows/System32/windowmanagementapi.dll");
-                CopyFile("Windows/System32/wuceffects.dll");
-                CopyFile("Windows/apppatch/DirectXApps.sdb");
-                CopyFile("Windows/apppatch/DirectXApps_FOD.sdb");
-                CopyFile("Windows/System32/Windows.gaming.input.dll");
-                CopyFile("Windows/System32/DispBroker.Desktop.dll");
-                CopyFile("Windows/System32/DispBrokerDesktop.dll");
-                CopyFile("Windows/System32/DispBroker.dll");
-                CopyFile("Windows/System32/GameInputRedist.dll");
-                CopyFile("Windows/System32/dwmghost.dll");
-                CopyFile("Windows/System32/InputHost.dll");
-                CopyFile("Windows/System32/Windows.Graphics.dll");
-                CopyFile("Windows/System32/OneCoreUAPCommonProxyStub.dll");
-                CopyFile("Windows/System32/UIAutomationCore.dll");
-                CopyFile("Windows/System32/UIAnimation.dll");
-                CopyKey(HiveTypes.Software, "Microsoft\\Windows\\Dwm");
-                CopyKey(HiveTypes.Software, "Microsoft\\SecurityManager");
-                CopyKey(HiveTypes.Software, "Microsoft\\WindowsRuntime");
-                //   File.Copy(SourcePath + "Windows/system32/cmd.exe", Base + "Windows/system32/dwm.exe", true);
-                //  File.Copy(SourcePath + "Windows/system32/dwm.exe", Base + "Windows/system32/dwm2.exe", true);
-                //   File.Copy(SourcePath + "Windows/system32/en-us/dwm.exe.mui", Base + "Windows/system32/en-us/dwm2.exe.mui", true);
-
-            }
-            if (Builder.Options.UseModernTaskmgr)
-            {
-                CopyFile("Windows/System32/en-us/Taskmgr.exe.mui");
-                CopyFile("Windows/System32/Taskmgr.exe");
-                CopyFile("Windows/System32/chartv.dll");
-                CopyFile("Windows/System32/D3DSCache.dll");
-                CopyFile("Windows/System32/NetworkUXBroker.dll");
-                CopyFile("Windows/System32/WlanMediaManager.dll");
-                CopyFile("Windows/System32/srumapi.dll");
-                CopyFile("Windows/System32/dxilconv.dll");
-                CopyFile("Windows/System32/LaunchTM.exe");
-                CopyFile("Windows/SystemResources/Taskmgr.exe.mun");
-                CopyFile("Windows/System32/pdh.dll");
-            }
 
             Builder.ReportProgress(false, 0, "Copying Required Registry");
             CopyKey(HiveTypes.Software, "Classes");
@@ -461,6 +293,15 @@ namespace WinPEBuilder.Core
             CopyKey(HiveTypes.System, "ControlSet001\\Control\\FeatureManagement");
             //CopyKey(HiveTypes.System, "ControlSet001\\Policies\\Microsoft\\FeatureManagement");
 
+            Builder.ReportProgress(false, 0, "Process plugins");
+            int curPlugin = 0;
+            foreach (var item in Builder.Plugins)
+            {
+                Builder.ReportProgress(false, (int)Math.Round((double)(100 * curPlugin) / Builder.Plugins.Count), "Processing plugin: " +item.DisplayName);
+                item.Run(this);
+                curPlugin++;
+            }
+
             //add various tools
             Directory.CreateDirectory(Base + "tools");
 
@@ -474,7 +315,7 @@ namespace WinPEBuilder.Core
                 File.Copy("PENetwork_en-US.lng", Base + "tools/PENetwork_en-US.lng", true);
             Directory.CreateDirectory(Base + "tools/windbg/");
             if (Directory.Exists("windbg"))
-                CopyFilesRecursively("windbg", Base + "tools/windbg/");
+                CopyDirectory("windbg", Base + "tools/windbg/");
 
             TakeOwnership(Base + "windows/system32/startnet.cmd", false);
             File.WriteAllText(Base + "windows/system32/startnet.cmd", "@echo off\necho welcome!");
@@ -487,19 +328,19 @@ namespace WinPEBuilder.Core
             return true;
 
         }
-        public static void CopyFilesRecursively(string sourcepath, string targetpath)
+        public static void CopyDirectory(string sourcepath, string targetpath)
         {
             var source = new DirectoryInfo(sourcepath);
             var target = new DirectoryInfo(targetpath);
             foreach (DirectoryInfo dir in source.GetDirectories())
-                CopyFilesRecursively(dir, target.CreateSubdirectory(dir.Name));
+                CopyDirectory(dir, target.CreateSubdirectory(dir.Name));
             foreach (FileInfo file in source.GetFiles())
                 file.CopyTo(Path.Combine(target.FullName, file.Name), true);
         }
-        public static void CopyFilesRecursively(DirectoryInfo source, DirectoryInfo target)
+        public static void CopyDirectory(DirectoryInfo source, DirectoryInfo target)
         {
             foreach (DirectoryInfo dir in source.GetDirectories())
-                CopyFilesRecursively(dir, target.CreateSubdirectory(dir.Name));
+                CopyDirectory(dir, target.CreateSubdirectory(dir.Name));
             foreach (FileInfo file in source.GetFiles())
                 file.CopyTo(Path.Combine(target.FullName, file.Name), true);
         }
@@ -527,7 +368,7 @@ namespace WinPEBuilder.Core
             Builder.ReportProgress(false, 0, "Taking ownership of files. Setting owner. This might take some time");
             takeOwnProcess.EnableRaisingEvents = true;
             takeOwnProcess.StartInfo = takeOwnStartInfo;
-            takeOwnProcess.OutputDataReceived += (sender, e) => Debug.WriteLine(e.Data);
+            takeOwnProcess.OutputDataReceived += (sender, e) => LogEvent(e.Data);
 
             // Start the process.
             takeOwnProcess.Start();
@@ -574,7 +415,7 @@ namespace WinPEBuilder.Core
             Builder.ReportProgress(false, 0, "Taking ownership of registry (hive " + hive + "). Setting owner. This might take some time");
             takeOwnProcess.EnableRaisingEvents = true;
             takeOwnProcess.StartInfo = takeOwnStartInfo;
-            takeOwnProcess.OutputDataReceived += (sender, e) => Debug.WriteLine(e.Data);
+            takeOwnProcess.OutputDataReceived += (sender, e) => LogEvent(e.Data);
 
             // Start the process.
             takeOwnProcess.Start();
@@ -620,7 +461,7 @@ namespace WinPEBuilder.Core
 
             takeOwnProcess.EnableRaisingEvents = true;
             takeOwnProcess.StartInfo = takeOwnStartInfo;
-            takeOwnProcess.OutputDataReceived += (sender, e) => Debug.WriteLine(e.Data);
+            takeOwnProcess.OutputDataReceived += (sender, e) => LogEvent(e.Data);
 
             // Start the process.
             takeOwnProcess.Start();
@@ -647,7 +488,7 @@ namespace WinPEBuilder.Core
             Builder.ReportProgress(false, 50, "Completed take ownership of registry (hive " + hive + ")");
             return takeOwnSuccessful;
         }
-        private void TakeOwnership(string path, bool recursive)
+        public void TakeOwnership(string path, bool recursive)
         {
             if (recursive)
             {
@@ -682,7 +523,7 @@ namespace WinPEBuilder.Core
             }
 
         }
-        public static bool TakeOwnership2(string fileName, bool recursive)
+        public bool TakeOwnership2(string fileName, bool recursive)
         {
             Process takeOwnProcess = new();
             ProcessStartInfo takeOwnStartInfo = new()
@@ -708,7 +549,7 @@ namespace WinPEBuilder.Core
 
             takeOwnProcess.EnableRaisingEvents = true;
             takeOwnProcess.StartInfo = takeOwnStartInfo;
-            takeOwnProcess.OutputDataReceived += (sender, e) => Debug.WriteLine(e.Data);
+            takeOwnProcess.OutputDataReceived += (sender, e) => LogEvent(e.Data);
 
             // Start the process.
             takeOwnProcess.Start();
@@ -735,7 +576,7 @@ namespace WinPEBuilder.Core
 
             return takeOwnSuccessful;
         }
-        public static bool GrantFullControl(string fileName, string userName, bool recursive)
+        public bool GrantFullControl(string fileName, string userName, bool recursive)
         {
             Process grantFullControlProcess = new();
             ProcessStartInfo grantFullControlStartInfo = new()
@@ -759,7 +600,7 @@ namespace WinPEBuilder.Core
 
             grantFullControlProcess.EnableRaisingEvents = true;
             grantFullControlProcess.StartInfo = grantFullControlStartInfo;
-            grantFullControlProcess.OutputDataReceived += (sender, e) => Debug.WriteLine(e.Data);
+            grantFullControlProcess.OutputDataReceived += (sender, e) => LogEvent(e.Data);
 
             //Logger.WriteLine("Running process: icacls " + grantFullControlStartInfo.Arguments + "\n");
 
@@ -783,122 +624,16 @@ namespace WinPEBuilder.Core
             grantFullControlProcess.Dispose();
             return grantFullControlSuccessful;
         }
-        #region Registry takeown
-        [DllImport("Advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern uint RegOpenKeyEx(IntPtr hKey, string lpSubKey, uint ulOptions, int samDesired, ref IntPtr phkResult);
-        public const int HKEY_CURRENT_USER = unchecked((int)0x80000001);
-        public const int HKEY_CLASSES_ROOT = unchecked((int)0x80000000);
-        public const int KEY_WOW64_64KEY = 0x0100;
-        public const int WRITE_OWNER = 0x00080000;
-        public const int WRITE_DAC = 0x00040000;
-        [DllImport("Advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern uint RegCloseKey(IntPtr hKey);
-        [DllImport("Advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern bool LookupPrivilegeValue([In] string lpSystemName, [In] string lpName, [Out] out LUID Luid);
-        [StructLayout(LayoutKind.Sequential)]
-        public struct LUID
+        /// <summary>
+        /// Logs an event
+        /// </summary>
+        /// <param name="message">The message to log</param>
+        public void LogEvent(string? message)
         {
-            public int LowPart;
-            public int HighPart;
+            if (message != null)
+            {
+                Builder.Log(message);
+            }
         }
-        [DllImport("Advapi32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern bool AdjustTokenPrivileges(IntPtr TokenHandle, bool DisableAllPrivileges, IntPtr NewState, int BufferLength, IntPtr PreviousState, ref int ReturnLength);
-        [StructLayout(LayoutKind.Sequential)]
-        public struct LUID_AND_ATTRIBUTES
-        {
-            public LUID Luid;
-            public int Attributes;
-        }
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct TOKEN_PRIVILEGES
-        {
-            internal int PrivilegeCount;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-            internal int[] Privileges;
-        }
-        public const int TOKEN_ASSIGN_PRIMARY = 0x1;
-        public const int TOKEN_DUPLICATE = 0x2;
-        public const int TOKEN_IMPERSONATE = 0x4;
-        public const int TOKEN_QUERY = 0x8;
-        public const int TOKEN_QUERY_SOURCE = 0x10;
-        public const int TOKEN_ADJUST_PRIVILEGES = 0x20;
-        public const int TOKEN_ADJUST_GROUPS = 0x40;
-        public const int TOKEN_ADJUST_DEFAULT = 0x80;
-        public const int TOKEN_ALL_ACCESS = TOKEN_ASSIGN_PRIMARY
-              + TOKEN_DUPLICATE + TOKEN_IMPERSONATE + TOKEN_QUERY
-              + TOKEN_QUERY_SOURCE + TOKEN_ADJUST_PRIVILEGES
-              + TOKEN_ADJUST_GROUPS + TOKEN_ADJUST_DEFAULT;
-        public const string SE_RESTORE_NAME = "SeRestorePrivilege";
-        public const string SE_DEBUG_NAME = "SeDebugPrivilege";
-        public const string SE_TCB_NAME = "SeTcbPrivilege";
-        public const string SE_TAKE_OWNERSHIP_NAME = "SeTakeOwnershipPrivilege";
-        public const int SE_PRIVILEGE_ENABLED_BY_DEFAULT = (0x00000001);
-        public const int SE_PRIVILEGE_ENABLED = (0x00000002);
-        public const int SE_PRIVILEGE_REMOVED = (0X00000004);
-        public const int SE_PRIVILEGE_USED_FOR_ACCESS = unchecked((int)0x80000000);
-        [DllImport("Advapi32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        internal static extern bool OpenProcessToken(IntPtr hProcess, uint desiredAccess, out IntPtr hToken);
-        [DllImport("Kernel32.dll", SetLastError = true)]
-        internal static extern bool CloseHandle(IntPtr hObject);
-        [DllImport("Advapi32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern uint SetSecurityInfo(IntPtr handle, SE_OBJECT_TYPE ObjectType, uint SecurityInfo,
-            IntPtr psidOwner, IntPtr psidGroup, IntPtr pDacl, IntPtr pSacl);
-        public const int OWNER_SECURITY_INFORMATION = 0x00000001;
-        public enum SE_OBJECT_TYPE
-        {
-            SE_UNKNOWN_OBJECT_TYPE = 0,
-            SE_FILE_OBJECT,
-            SE_SERVICE,
-            SE_PRINTER,
-            SE_REGISTRY_KEY,
-            SE_LMSHARE,
-            SE_KERNEL_OBJECT,
-            SE_WINDOW_OBJECT,
-            SE_DS_OBJECT,
-            SE_DS_OBJECT_ALL,
-            SE_PROVIDER_DEFINED_OBJECT,
-            SE_WMIGUID_OBJECT,
-            SE_REGISTRY_WOW64_32KEY,
-            SE_REGISTRY_WOW64_64KEY,
-        }
-        [Flags]
-        internal enum SECURITY_INFORMATION : uint
-        {
-            OWNER_SECURITY_INFORMATION = 0x00000001,
-            GROUP_SECURITY_INFORMATION = 0x00000002,
-            DACL_SECURITY_INFORMATION = 0x00000004,
-            SACL_SECURITY_INFORMATION = 0x00000008,
-            UNPROTECTED_SACL_SECURITY_INFORMATION = 0x10000000,
-            UNPROTECTED_DACL_SECURITY_INFORMATION = 0x20000000,
-            PROTECTED_SACL_SECURITY_INFORMATION = 0x40000000,
-            PROTECTED_DACL_SECURITY_INFORMATION = 0x80000000
-        }
-        [StructLayoutAttribute(LayoutKind.Sequential)]
-        public struct SECURITY_DESCRIPTOR
-        {
-            public byte revision;
-            public byte size;
-            public short control;
-            public IntPtr owner;
-            public IntPtr group;
-            public IntPtr sacl;
-            public IntPtr dacl;
-        }
-        [DllImport("Advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        internal static extern bool ConvertStringSidToSid(string StringSid, out IntPtr Sid);
-
-        [DllImport("Advapi32.dll", SetLastError = true)]
-        internal static extern Int32 RegSetKeySecurity(
-        IntPtr hKey,
-        SECURITY_INFORMATION SecurityInformation,
-        ref SECURITY_DESCRIPTOR pSecurityDescriptor);
-        [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Ansi)]
-        internal static extern bool ConvertStringSecurityDescriptorToSecurityDescriptor(
-  string StringSecurityDescriptor,
-  uint StringSDRevision,
-  out SECURITY_DESCRIPTOR SecurityDescriptor,
-  out ulong SecurityDescriptorSize
-);
-        #endregion
     }
 }

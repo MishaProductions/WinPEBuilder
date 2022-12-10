@@ -12,25 +12,9 @@ namespace WinPEBuilder.Core
     public class BuilderOptions
     {
         /// <summary>
-        /// Adds DWM. Required for anything related to UWP
+        /// GUID of plugin. Use PluginLoader class to get a list of plugins
         /// </summary>
-        public bool UseDWM { get; set; }
-        /// <summary>
-        /// Adds user profile system. Requires DWM 
-        /// </summary>
-        public bool UseLogonUI { get; set; }
-        /// <summary>
-        /// Adds StateReposotory services and SiHost. Requires LogonUI, DWM, and explorer.
-        /// </summary>
-        public bool EnableFullUWPSupport { get; set; }
-        /// <summary>
-        /// Installs all of the files for Explorer
-        /// </summary>
-        public bool UseExplorer { get; set; } = true;
-        /// <summary>
-        /// Copy modern task manager?
-        /// </summary>
-        public bool UseModernTaskmgr { get; set; } = false;
+        public List<Guid> Plugins = new List<Guid>();
         /// <summary>
         /// The output file
         /// </summary>

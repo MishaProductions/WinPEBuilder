@@ -20,6 +20,7 @@ using WinPEBuilder.Core;
 using System.Windows.Threading;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using ControlzEx.Theming;
+using WinPEBuilder.WPF.Configuration;
 
 namespace WinPEBuilder.WPF
 {
@@ -30,21 +31,39 @@ namespace WinPEBuilder.WPF
         public MainWindow()
         {
             InitializeComponent();
-            UWPBox.IsEnabled = false;
-            LogonUIBox.IsEnabled = false;
-            ExplorerBox.IsEnabled = false;
             VersionText.Text = "Version: " + Builder.Version;
-            if (Debugger.IsAttached && Environment.UserName.ToLower() == "misha")
+            OutputVHDBox.Text = Settings.Data.VHDPath;
+            ISOSourceBox.Text = Settings.Data.ISOSourcePath;
+
+            LoadPlugins();
+        }
+
+        private void LoadPlugins()
+        {
+            var plg = PluginLoader.GetPlugins();
+            foreach (var item in plg)
             {
-                //Debug code for Misha
-                ISOSourceBox.Text = @"C:\Users\Misha\Downloads\25262.1000_amd64_en-us_professional_5f0aec65_convert\25262.1000.221205-1627.RS_PRERELEASE_CLIENTPRO_OEMRET_X64FRE_EN-US.ISO";
-                OutputVHDBox.Text = @"C:\winpegen.vhd";
+                var chk = new CheckBox();
+                chk.Content = item.DisplayName;
+                chk.IsChecked = true;
+                chk.Tag = item;
+                chk.Checked += Chk_Checked;
+                PluginsList.Children.Add(chk);
             }
-            if (Debugger.IsAttached && Environment.UserName.ToLower() == "pdawg")
+        }
+        public List<Guid> CheckedPlugins = new List<Guid>();
+        private void Chk_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox chk)
             {
-                // Debug code for Pdawg
-                ISOSourceBox.Text = @"D:\Other\win11pebuilder\Win11_22H2_English_x64v1.iso";
-                OutputVHDBox.Text = @"D:\Other\win11pebuilder\winpegen.vhd";
+                if (chk.IsChecked == true)
+                {
+                    CheckedPlugins.Add(((IPlugin)chk.Tag).PluginGuid);
+                }
+                else
+                {
+                    CheckedPlugins.Remove(((IPlugin)chk.Tag).PluginGuid);
+                }
             }
         }
 
@@ -52,25 +71,6 @@ namespace WinPEBuilder.WPF
         {
             Process.Start("explorer", "https://github.com/MishaTY/WinPEBuilder/");
         }
-        private void DWMBox_Click(object sender, RoutedEventArgs e)
-        {
-            if (DWMBox.IsChecked == true)
-            {
-                UWPBox.IsEnabled = true;
-                LogonUIBox.IsEnabled = true;
-                ExplorerBox.IsEnabled = true;
-            }
-            else
-            {
-                UWPBox.IsEnabled = false;
-                LogonUIBox.IsEnabled = false;
-                ExplorerBox.IsEnabled = false;
-                UWPBox.IsChecked = false;
-                LogonUIBox.IsChecked = false;
-                ExplorerBox.IsChecked = false;
-            }
-        }
-
         private async void BuildButton_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(ISOSourceBox.Text))
@@ -86,11 +86,7 @@ namespace WinPEBuilder.WPF
 
             //create options
             var options = new BuilderOptions();
-            options.UseDWM = DWMBox.IsChecked == true;
-            options.EnableFullUWPSupport = UWPBox.IsChecked == true;
-            options.UseLogonUI = LogonUIBox.IsChecked == true;
-            options.UseExplorer = ExplorerBox.IsChecked == true;
-            options.UseModernTaskmgr = TaskmgrBox.IsChecked == true;
+            options.Plugins = CheckedPlugins;
             if (VHDOutput.IsChecked == true)
             {
                 options.OutputType = BuilderOptionsOutputType.VHD;
@@ -182,6 +178,8 @@ namespace WinPEBuilder.WPF
             if (dlg.ShowDialog(this) == true)
             {
                 ISOSourceBox.Text = dlg.FileName;
+                Settings.Data.ISOSourcePath = dlg.FileName;
+                Settings.Save();
             }
         }
 
@@ -193,6 +191,8 @@ namespace WinPEBuilder.WPF
             if (dlg.ShowDialog(this) == true)
             {
                 OutputVHDBox.Text = dlg.FileName;
+                Settings.Data.VHDPath = dlg.FileName;
+                Settings.Save();
             }
         }
 

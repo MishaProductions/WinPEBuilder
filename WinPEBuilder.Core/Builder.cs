@@ -12,6 +12,7 @@ namespace WinPEBuilder.Core
         private string IsoPath;
         public static string WorkingDir = "";
         public static string Version = "0.0.0.3a";
+        public List<IPlugin> Plugins { get; }
         /// <summary>
         /// Location of the new image such as Z:\
         /// </summary>
@@ -22,12 +23,17 @@ namespace WinPEBuilder.Core
         public string SourcePath { get; private set; }
 
         /// <summary>
-        /// Not thread safe!
+        /// Not thread safe
         /// </summary>
         public event BuilderEvent? OnProgress;
-
+        /// <summary>
+        /// Not thread safe
+        /// </summary>
         public event EventHandler? OnComplete;
-
+        /// <summary>
+        /// Not thread safe - used to output to the log
+        /// </summary>
+        public event BuilderLogEvent? OnLog;
         /// <summary>
         /// Builder class
         /// </summary>
@@ -49,16 +55,23 @@ namespace WinPEBuilder.Core
                 throw new ArgumentException($"'{nameof(isoPath)}' cannot be null or empty.", nameof(isoPath));
             }
 
-            //check options
-            if (!options.UseDWM)
+            //resolve plugins
+            var plugins = PluginLoader.GetPlugins();
+            Plugins = new List<IPlugin>();
+            foreach (var guid in options.Plugins)
             {
-                if (options.EnableFullUWPSupport)
+                bool found = false;
+                foreach (var plg in plugins)
                 {
-                    throw new ArgumentException("Cannot install fullUWP support when DWM is not installed.", nameof(options));
+                    if (plg.PluginGuid == guid)
+                    {
+                        Plugins.Add(plg);
+                        found = true;
+                    }
                 }
-                if (options.UseLogonUI)
+                if (!found)
                 {
-                    throw new ArgumentException("Cannot install logonui when DWM is not installed.", nameof(options));
+                    throw new Exception("Plugin with GUID " + guid + " cannot be found");
                 }
             }
 
@@ -450,6 +463,11 @@ namespace WinPEBuilder.Core
         internal void ReportProgress(bool error, int prg, string message)
         {
             OnProgress?.Invoke(error, prg, message);
+        }
+        public void Log(string message)
+        {
+            Debug.WriteLine(message);
+            OnLog?.Invoke(message+Environment.NewLine);
         }
     }
 }

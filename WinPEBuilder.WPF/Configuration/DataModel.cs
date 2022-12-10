@@ -6,11 +6,14 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace WinPEBuilder.WPF.Configuration
+namespace WinPEBuilder.WPF.Configuration.Configuration
 {
     internal class DataModel
     {
-        public string? SerialTheme { get; set; }
-        public string? SerialColor { get; set; }
+        public string SerialTheme { get; set; } = "Dark";
+        public string SerialColor { get; set; } = "Purple";
+
+        public string VHDPath { get; set; } = "";
+        public string ISOSourcePath { get; set; } = "";
     }
 }

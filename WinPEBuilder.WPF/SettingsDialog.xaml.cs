@@ -17,6 +17,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.IO;
 using System.Diagnostics;
+using WinPEBuilder.WPF.Configuration.Configuration;
 using WinPEBuilder.WPF.Configuration;
 
 namespace WinPEBuilder.WPF
@@ -26,28 +27,22 @@ namespace WinPEBuilder.WPF
     /// </summary>
     public partial class SettingsDialog : MetroWindow
     {
+        public static string SettingLocalTheme = Settings.Data.SerialTheme;
+        public static string SettingLocalColor = Settings.Data.SerialColor;
         public SettingsDialog()
         {
             InitializeComponent();
+            ColorComboBox.SelectedValue = "System.Windows.Controls.ComboBoxItem: " + SettingLocalColor;
+            ThemeComboBox.SelectedValue = "System.Windows.Controls.ComboBoxItem: " + SettingLocalTheme;
+            //todo fix loading
         }
 
-        public static string SettingLocalTheme;
-        public static string SettingLocalColor;
-
-        private async void SaveBtn_Click(object sender, RoutedEventArgs e)
+        private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-            var saveConfigObject = new DataModel
-            {
-                SerialColor = SettingLocalColor,
-                SerialTheme = SettingLocalTheme
-            };
-
+            Settings.Data.SerialColor = SettingLocalColor;
+            Settings.Data.SerialTheme = SettingLocalTheme;
+            Settings.Save();
             this.DialogResult = true;
-            string saveConfigName = "Usersconfiguration.json";
-            FileStream createStream = File.Create(saveConfigName);
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            await JsonSerializer.SerializeAsync(createStream, saveConfigObject, options);
-            await createStream.DisposeAsync();
         }
 
         private void ThemeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
