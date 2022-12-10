@@ -274,7 +274,7 @@ namespace WinPEBuilder.Core
                 RunSetACL(x);
             });
             Builder.ReportProgress(false, 0, "Copying needed files");
-            CopyService("TrustedInstaller");
+            
             
 
 

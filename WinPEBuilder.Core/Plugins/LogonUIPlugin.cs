@@ -69,6 +69,25 @@ namespace WinPEBuilder.Core.Plugins
             {
                 modder.LogEvent("modder.SoftwareHive is null");
             }
+
+            //Fix "Please wait for the TrustedInstaller"
+            if (modder.SystemHive != null)
+            {
+                RegistryKey? key = modder.SystemHive.RootKey.CreateSubKey("ControlSet001\\Services\\TrustedInstaller");
+                if (key != null)
+                {
+                    key.SetValue("Start", 3, RegistryValueKind.DWord);
+                    key.Close();
+                }
+                else
+                {
+                    modder.LogEvent("failed to enable verbose logon: registry key is null");
+                }
+            }
+            else
+            {
+                modder.LogEvent("modder.SystemHive is null");
+            }
         }
     }
 }
