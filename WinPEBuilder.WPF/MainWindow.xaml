@@ -40,7 +40,7 @@
             <TabItem Header="Options" Height="39" VerticalAlignment="Top">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <StackPanel x:Name="PluginsList" HorizontalAlignment="Left" Orientation="Vertical" VerticalAlignment="Top" Margin="10">
-                        <TextBlock Text="Please note that DWM is required for most options to be enabled." Margin="5,10,0,0" TextWrapping="WrapWithOverflow"/>
+                        <TextBlock Text="Please note that DWM is required for most options to be enabled." Margin="0,0,0,10" TextWrapping="WrapWithOverflow"/>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
@@ -61,7 +61,24 @@
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Customization">
-
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="Configure the BSOD" Margin="10" FontWeight="SemiBold"/>
+                        <TextBlock Text="Emoticon" Margin="10,0,0,4"/>
+                        <TextBox Width="200" HorizontalAlignment="Left" Margin="10,0,0,8" MaxLength="2" x:Name="BSODEmoticonBox"/>
+                        <TextBlock Text="String 1 (50 characters)" Margin="10,0,0,4"/>
+                        <TextBox Width="200" HorizontalAlignment="Left" Margin="10,0,0,8" MaxLength="50" x:Name="BSODStr1Box"/>
+                        <TextBlock Text="String 2 (50 characters)" Margin="10,0,0,4"/>
+                        <TextBox Width="200" HorizontalAlignment="Left" Margin="10,0,0,8" MaxLength="50" x:Name="BSODStr2Box"/>
+                        <TextBlock Text="Website URL (50 characters)" Margin="10,0,0,4"/>
+                        <TextBox Width="200" HorizontalAlignment="Left" Margin="10,0,0,8" MaxLength="50" x:Name="BSODWebsiteBox"/>
+                        <TextBlock Text="Support Number (50 characters)" Margin="10,0,0,4"/>
+                        <TextBox Width="200" HorizontalAlignment="Left" Margin="10,0,0,8" MaxLength="50" x:Name="BSODSupportBox"/>
+                        <TextBlock Text="Possible Fixes (50 characters)" Margin="10,0,0,4"/>
+                        <TextBox Width="200" HorizontalAlignment="Left" Margin="10,0,0,8" MaxLength="50" x:Name="BSODFixesBox"/>
+                        <CheckBox Margin="10" Content="Aero BSOD (sets background of BSOD as transparent)" x:Name="BSODAeroCheck"/>
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
             <TabItem Header="Log">
                 <RichTextBox x:Name="RchLog" IsReadOnly="True" BorderThickness="0"></RichTextBox>

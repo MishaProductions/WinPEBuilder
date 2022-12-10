@@ -238,7 +238,6 @@ namespace WinPEBuilder.Core
         {
             //needed for modern explorer
             CopyFile("Windows/System32/shellstyle.dll");
-            // Partial implementation of BCH (only folder): Directory.CreateDirectory(Base + "Windows/BugCheckHack");
             Directory.CreateDirectory(Base + "Windows/Resources/Themes/Aero/Shell/");
             Directory.CreateDirectory(Base + "Windows/Resources/Themes/Aero/Shell/NormalColor/");
             CopyFile("Windows/Resources/Themes/Aero/Shell/NormalColor/ShellStyle.dll");
