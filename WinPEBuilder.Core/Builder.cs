@@ -271,7 +271,7 @@ namespace WinPEBuilder.Core
             else
             {
                 //create new vhd
-                script += $"create vdisk file=\"{isoPath}\" maximum=3000\n";
+                script += $"create vdisk file=\"{isoPath}\" maximum=4500\n";
             }
 
             //mount vhd
@@ -281,7 +281,7 @@ namespace WinPEBuilder.Core
             script += $"clean\n";
 
             //create main partition
-            script += $"create partition primary size=2500\n";
+            script += $"create partition primary size=3000\n";
             script += $"format fs=ntfs label=\"OSIMAGE\" quick\n";
             script += $"assign letter=z\n";
             script += $"active\n";

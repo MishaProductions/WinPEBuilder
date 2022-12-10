@@ -273,7 +273,7 @@ namespace WinPEBuilder.Core
                 RunSetACL(x);
             });
             Builder.ReportProgress(false, 0, "Copying needed files");
-
+            CopyService("TrustedInstaller");
             if (Builder.Options.UseExplorer)
             {
                 CopyFile("Windows/System32/twinapi.dll");
@@ -361,13 +361,28 @@ namespace WinPEBuilder.Core
                 CopyFile("Windows/System32/Windows.UI.XamlHost.dll");
                 CopyFile("Windows/System32/Windows.UI.Xaml.Controls.dll");
                 CopyFile("Windows/System32/Windows.UI.Xaml.Resources.21h1.dll");
-                CopyFile("Windows/System32/shaact.dll");
+                CopyFile("Windows/System32/Windows.UI.Xaml.Phone.dll");
+                CopyFile("Windows/System32/Windows.UI.Xaml.Maps.dll");
+                CopyFile("Windows/System32/Windows.UI.Xaml.InkControls.dll");
+                CopyFile("Windows/System32/Windows.UI.Xaml.Resources.Common.dll");
+                CopyFile("Windows/System32/FontGlyphAnimator.dll");
+                CopyFile("Windows/System32/NetworkIcon.dll");
                 CopyFile("Windows/System32/shacct.dll");
+                CopyFile("Windows/System32/LanguageOverlayUtil.dll");
+                CopyFile("Windows/System32/threadpoolwinrt.dll");
+                CopyFile("Windows/System32/Windows.Devices.Sensors.dll");
+                CopyFile("Windows/System32/InputSwitch.dll");
+                CopyFile("Windows/System32/pfclient.dll");
+                CopyFile("Windows/System32/globinputhost.dll");
+                CopyFile("Windows/System32/Windows.UI.BioFeedback.dll");
+                CopyFile("Windows/System32/en-us/Windows.UI.Xaml.dll.mui");
                 File.Copy(SourcePath + "Windows/system32/cmd.exe", Base + "Windows/system32/LogonUI.exe", true);
                 File.Copy(SourcePath + "Windows/system32/LogonUI.exe", Base + "Windows/system32/LogonUI2.exe", true);
 
                 CopyDir("Windows/SystemApps/Microsoft.LockApp_cw5n1h2txyewy/");
                 CopyDir("Windows/SystemResources/Windows.UI.Logon/");
+                CopyDir("Windows/SystemResources/Windows.UI.BioFeedback/");
+                CopyDir("ProgramData/Microsoft/User Account Pictures/");
             }
             if (Builder.Options.UseDWM)
             {
