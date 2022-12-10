@@ -198,15 +198,39 @@ namespace WinPEBuilder.Core
                 }
             }
         }
+        public void CopyDir(string path)
+        {
+            if (Directory.Exists(SourcePath + path))
+            {
+                //check if dest exists
+                if (Directory.Exists(Base + path))
+                {
+                    TakeOwnership(Base + path, true);
+                }
+                try
+                {
+                    CopyFilesRecursively(SourcePath + path, Base + path);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Error while copying file: " + ex.ToString());
+                }
+
+            }
+            else
+            {
+                Debug.WriteLine("dir not found: " + path);
+            }
+        }
         public void CopyService(string name)
         {
             try
             {
                 CopyKey(HiveTypes.System, "ControlSet001\\Services\\" + name);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Debug.WriteLine("copy service error: "+ex.ToString());
+                Debug.WriteLine("copy service error: " + ex.ToString());
             }
         }
         public bool Run()
@@ -319,22 +343,31 @@ namespace WinPEBuilder.Core
                 CopyFile("Windows/System32/ndfapi.dll");
                 CopyFile("Windows/System32/wdi.dll");
                 CopyFile("Windows/System32/fundisc.dll");
+                CopyFile("Windows/System32/clbcatq.dll");
+                CopyFile("Windows/SysWOW64/propsys.dll");
 
                 CopyService("StateRepository");
                 Directory.CreateDirectory(Base + "ProgramData/Microsoft/Windows/AppRepository");
                 CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\AppX");
+                CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\ShellCompatibility");
                 if (Builder.Options.EnableFullUWPSupport)
                 {
-                   
+
                 }
             }
             if (Builder.Options.UseLogonUI)
             {
                 CopyFile("Windows/System32/Windows.UI.Logon.dll");
                 CopyFile("Windows/System32/Windows.UI.XamlHost.dll");
+                CopyFile("Windows/System32/Windows.UI.Xaml.Controls.dll");
+                CopyFile("Windows/System32/Windows.UI.Xaml.Resources.21h1.dll");
                 CopyFile("Windows/System32/shaact.dll");
+                CopyFile("Windows/System32/shacct.dll");
                 File.Copy(SourcePath + "Windows/system32/cmd.exe", Base + "Windows/system32/LogonUI.exe", true);
                 File.Copy(SourcePath + "Windows/system32/LogonUI.exe", Base + "Windows/system32/LogonUI2.exe", true);
+
+                CopyDir("Windows/SystemApps/Microsoft.LockApp_cw5n1h2txyewy/");
+                CopyDir("Windows/SystemResources/Windows.UI.Logon/");
             }
             if (Builder.Options.UseDWM)
             {
@@ -411,7 +444,7 @@ namespace WinPEBuilder.Core
             CopyKey(HiveTypes.Software, "Microsoft\\SQMClient");
             CopyKey(HiveTypes.System, "ControlSet001\\Control\\ProductOptions");
             CopyKey(HiveTypes.System, "ControlSet001\\Control\\FeatureManagement");
-            CopyKey(HiveTypes.System, "ControlSet001\\Policies\\Microsoft\\FeatureManagement");
+            //CopyKey(HiveTypes.System, "ControlSet001\\Policies\\Microsoft\\FeatureManagement");
 
             //add various tools
             Directory.CreateDirectory(Base + "tools");
@@ -446,14 +479,14 @@ namespace WinPEBuilder.Core
             foreach (DirectoryInfo dir in source.GetDirectories())
                 CopyFilesRecursively(dir, target.CreateSubdirectory(dir.Name));
             foreach (FileInfo file in source.GetFiles())
-                file.CopyTo(Path.Combine(target.FullName, file.Name));
+                file.CopyTo(Path.Combine(target.FullName, file.Name), true);
         }
         public static void CopyFilesRecursively(DirectoryInfo source, DirectoryInfo target)
         {
             foreach (DirectoryInfo dir in source.GetDirectories())
                 CopyFilesRecursively(dir, target.CreateSubdirectory(dir.Name));
             foreach (FileInfo file in source.GetFiles())
-                file.CopyTo(Path.Combine(target.FullName, file.Name));
+                file.CopyTo(Path.Combine(target.FullName, file.Name), true);
         }
         private bool FixBlackScreen()
         {
@@ -474,7 +507,7 @@ namespace WinPEBuilder.Core
                 // Do not show a command window.
                 CreateNoWindow = true,
 
-                Arguments = $"-ot file -on \"{Base.Replace(@"\",@"\\")}\" -actn ace -actn setprot -op \"dacl:p_nc\" -ace n:S-1-1-0;p:full -silent"
+                Arguments = $"-ot file -on \"{Base.Replace(@"\", @"\\")}\" -actn ace -actn setprot -op \"dacl:p_nc\" -ace n:S-1-1-0;p:full -silent"
             };
             Builder.ReportProgress(false, 0, "Taking ownership of files. Setting owner. This might take some time");
             takeOwnProcess.EnableRaisingEvents = true;
@@ -621,7 +654,7 @@ namespace WinPEBuilder.Core
                     ownerChanged = true;
                 }
                 catch (PrivilegeNotHeldException) { }
-                finally {  }
+                finally { }
 
                 try
                 {
