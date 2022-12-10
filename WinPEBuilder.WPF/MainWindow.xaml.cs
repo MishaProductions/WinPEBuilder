@@ -21,7 +21,6 @@ using System.Windows.Threading;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using ControlzEx.Theming;
 using WinPEBuilder.WPF.Configuration;
-using System.Media;
 
 namespace WinPEBuilder.WPF
 {
@@ -97,6 +96,79 @@ namespace WinPEBuilder.WPF
             else
             {
                 throw new NotImplementedException("ISO file output not implemented");
+            }
+
+            /// <summary>
+            /// BSOD Options sender
+            /// </summary>
+            
+            // Emoticon
+            if (BSODEmoticonBox.Text != null)
+            {
+                options.Emoticon = BSODEmoticonBox.Text;
+            }
+            else
+            {
+                options.Emoticon = ":)";
+            }
+
+            // String 1
+            if (BSODStr1Box.Text != null)
+            {
+                options.Str1 = BSODStr1Box.Text;
+            }
+            else
+            {
+                options.Str1 = "Ha! Looks like you messed up. We'll restart your s";
+            }
+
+            // String 2
+            if (BSODStr2Box.Text != null)
+            {
+                options.Str2 = BSODStr2Box.Text;
+            }
+            else
+            {
+                options.Str2 = "ystem for you so you can mess around more!";
+            }
+
+            // WebURL
+            if (BSODWebsiteBox.Text != null)
+            {
+                options.WebURL = BSODWebsiteBox.Text;
+            }
+            else
+            {
+                options.WebURL = "https://discord.gg/eNwUWt62vF";
+            }
+
+            // Support
+            if (BSODSupportBox.Text != null)
+            {
+                options.Support = BSODSupportBox.Text;
+            }
+            else
+            {
+                options.Support = "If you run into an issue, report it in our Discord!";
+            }
+
+            // Fixes
+            if (BSODFixesBox.Text != null)
+            {
+                options.Fixes = BSODFixesBox.Text;
+            }
+            else
+            {
+                options.Fixes = "For fixes, also join our Discord. We'll be happy to help!";
+            }
+
+            if ((bool)(BSODAeroCheck.IsChecked = true))
+            {
+                options.AeroBSOD = true;
+            }
+            else
+            {
+                options.AeroBSOD = false;
             }
 
             var builder = new Builder(options, ISOSourceBox.Text, System.AppDomain.CurrentDomain.BaseDirectory + @"work\");
@@ -207,7 +279,5 @@ namespace WinPEBuilder.WPF
                 Settings.Save();
             }
         }
-
-        // FOR MISHA: Use the "await this.ShowMessageAsync("This is the title", "Some message");" code to show errors. It fits well with the metro theme.
     }
 }

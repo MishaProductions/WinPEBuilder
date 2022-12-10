@@ -234,6 +234,7 @@ namespace WinPEBuilder.Core
                 LogEvent("Warning: copy service error: " + ex.ToString());
             }
         }
+
         internal bool Run()
         {
             //needed for modern explorer
@@ -335,6 +336,7 @@ namespace WinPEBuilder.Core
             return true;
 
         }
+
         public static void CopyDirectory(string sourcepath, string targetpath)
         {
             var source = new DirectoryInfo(sourcepath);
