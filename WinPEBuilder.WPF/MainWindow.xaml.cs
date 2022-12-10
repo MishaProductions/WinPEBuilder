@@ -21,6 +21,8 @@ using System.Windows.Threading;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using ControlzEx.Theming;
 using WinPEBuilder.WPF.Configuration;
+using System.Media;
+using System.Reflection.PortableExecutable;
 
 namespace WinPEBuilder.WPF
 {
