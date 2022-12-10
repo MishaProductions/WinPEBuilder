@@ -467,7 +467,7 @@ namespace WinPEBuilder.Core
         public void Log(string message)
         {
             Debug.WriteLine(message);
-            OnLog?.Invoke(message+Environment.NewLine);
+            OnLog?.Invoke(message + Environment.NewLine);
         }
     }
 }

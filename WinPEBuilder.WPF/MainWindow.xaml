@@ -60,6 +60,12 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
+            <TabItem Header="Customization">
+
+            </TabItem>
+            <TabItem Header="Log">
+                <RichTextBox x:Name="RchLog" IsReadOnly="True" BorderThickness="0"></RichTextBox>
+            </TabItem>
         </TabControl>
         <Button Content="App Settings" Height="30" Width="100" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,20" x:Name="SettingsButton" Click="SettingsButton_Click"/>
         <Button Content="Build" Height="30" Width="80" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,130,20" x:Name="BuildButton" Click="BuildButton_Click"/>

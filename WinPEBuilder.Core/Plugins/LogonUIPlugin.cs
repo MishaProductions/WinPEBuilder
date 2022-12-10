@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,13 +36,39 @@ namespace WinPEBuilder.Core.Plugins
             modder.CopyFile("Windows/System32/globinputhost.dll");
             modder.CopyFile("Windows/System32/Windows.UI.BioFeedback.dll");
             modder.CopyFile("Windows/System32/en-us/Windows.UI.Xaml.dll.mui");
-            File.Copy(modder.SourcePath + "Windows/system32/cmd.exe", modder.Base + "Windows/system32/LogonUI.exe", true);
-            File.Copy(modder.SourcePath + "Windows/system32/LogonUI.exe", modder.Base + "Windows/system32/LogonUI2.exe", true);
+            modder.CopyFile("Windows/System32/LogonUI.exe");
+            // File.Copy(modder.SourcePath + "Windows/system32/cmd.exe", modder.Base + "Windows/system32/LogonUI.exe", true);
+            File.Copy(modder.SourcePath + "Windows/system32/cmd.exe", modder.Base + "Windows/system32/UtilMan.exe", true);
+
+
+            //user profile service
+            modder.CopyFile("Windows/System32/profsvc.dll");
+            modder.CopyFile("Windows/System32/profsvcext.dll");
+
 
             modder.CopyDir("Windows/SystemApps/Microsoft.LockApp_cw5n1h2txyewy/");
             modder.CopyDir("Windows/SystemResources/Windows.UI.Logon/");
             modder.CopyDir("Windows/SystemResources/Windows.UI.BioFeedback/");
             modder.CopyDir("ProgramData/Microsoft/User Account Pictures/");
+
+            //enable verbose logon
+            if (modder.SoftwareHive != null)
+            {
+                RegistryKey? key = modder.SoftwareHive.RootKey.OpenSubKey("Microsoft\\Windows\\CurrentVersion\\Policies\\System");
+                if (key != null)
+                {
+                    key.SetValue("verbosestatus", 1, RegistryValueKind.DWord);
+                    key.Close();
+                }
+                else
+                {
+                    modder.LogEvent("failed to enable verbose logon: registry key is null");
+                }
+            }
+            else
+            {
+                modder.LogEvent("modder.SoftwareHive is null");
+            }
         }
     }
 }

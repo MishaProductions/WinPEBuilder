@@ -48,6 +48,7 @@ namespace WinPEBuilder.WPF
                 chk.IsChecked = true;
                 chk.Tag = item;
                 chk.Checked += Chk_Checked;
+                CheckedPlugins.Add(item.PluginGuid);
                 PluginsList.Children.Add(chk);
             }
         }
@@ -103,7 +104,15 @@ namespace WinPEBuilder.WPF
 
             builder.OnComplete += Builder_OnComplete;
             builder.OnProgress += Builder_OnProgress;
+            builder.OnLog += Builder_OnLog;
             builder.Start();
+        }
+
+        private async void Builder_OnLog(string message)
+        {
+            await Application.Current.Dispatcher.BeginInvoke(
+  DispatcherPriority.Background,
+  new Action(() => RchLog.AppendText(message)));
         }
 
         private async void Builder_OnProgress(bool error, int progress, string message)

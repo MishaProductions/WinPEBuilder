@@ -260,7 +260,7 @@ namespace WinPEBuilder.Core
             CopyFile("Windows/fonts/segoeui.ttf");
             FixBlackScreen();
             //takeown config folder (required)
-            TakeOwnership(SourcePath + "Windows/System32/config/", true);
+            TakeOwnership(SourcePath + "Windows/System32/config/", false);
 
             SoftwareHive = RegistyManager.MountHive(Base + "Windows/System32/config/SOFTWARE", "Tmp_Software");
             SystemHive = RegistyManager.MountHive(Base + "Windows/System32/config/System", "Tmp_System");
@@ -280,8 +280,11 @@ namespace WinPEBuilder.Core
 
             Builder.ReportProgress(false, 0, "Copying Required Registry");
             CopyKey(HiveTypes.Software, "Classes");
+            CopyKey(HiveTypes.Software, "Microsoft\\RPC");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\Explorer");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\AppModel");
+            CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\Authentication");
+            CopyKey(HiveTypes.Software, "Microsoft\\Windows NT\\CurrentVersion\\Winlogon");
             CopyKey(HiveTypes.Software, "Microsoft\\COM3");
 
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\SharedPC");
