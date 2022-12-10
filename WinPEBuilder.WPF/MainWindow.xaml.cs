@@ -99,10 +99,6 @@ namespace WinPEBuilder.WPF
             {
                 throw new NotImplementedException("ISO file output not implemented");
             }
-
-            /// <summary>
-            /// BSOD Options sender
-            /// </summary>
             
             // Emoticon
             if (BSODEmoticonBox.Text != null)
