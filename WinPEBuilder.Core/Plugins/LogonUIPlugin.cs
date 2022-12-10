@@ -36,7 +36,9 @@ namespace WinPEBuilder.Core.Plugins
             modder.CopyFile("Windows/System32/globinputhost.dll");
             modder.CopyFile("Windows/System32/Windows.UI.BioFeedback.dll");
             modder.CopyFile("Windows/System32/en-us/Windows.UI.Xaml.dll.mui");
+            modder.CopyFile("Windows/System32/en-us/Windows.Graphics.mui");
             modder.CopyFile("Windows/System32/LogonUI.exe");
+            modder.CopyFile("Windows/System32/camext.dll");
             // File.Copy(modder.SourcePath + "Windows/system32/cmd.exe", modder.Base + "Windows/system32/LogonUI.exe", true);
             File.Copy(modder.SourcePath + "Windows/system32/cmd.exe", modder.Base + "Windows/system32/UtilMan.exe", true);
 
