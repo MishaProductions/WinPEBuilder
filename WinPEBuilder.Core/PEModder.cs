@@ -321,7 +321,7 @@ namespace WinPEBuilder.Core
                 CopyDirectory("windbg", Base + "tools/windbg/");
 
             TakeOwnership(Base + "windows/system32/startnet.cmd", false);
-            File.WriteAllText(Base + "windows/system32/startnet.cmd", "@echo off\necho welcome!");
+            File.WriteAllText(Base + "windows/system32/startnet.cmd", "@echo off\necho welcome!\nwpeutil initializenetwork\nstart cmd\nwmic process where name=\"winlogon.exe\" delete\npause");
 
             SoftwareHive.SaveAndUnload();
             SystemHive.SaveAndUnload();
