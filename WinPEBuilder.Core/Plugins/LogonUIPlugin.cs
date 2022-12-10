@@ -17,6 +17,13 @@ namespace WinPEBuilder.Core.Plugins
 
         public void Run(PEModder modder)
         {
+            modder.CopyFile("Windows/fonts/segoeuisl.ttf");
+            modder.CopyFile("Windows/fonts/seguibl.ttf");
+            modder.CopyFile("Windows/fonts/seguiemj.ttf");
+            modder.CopyFile("Windows/fonts/SegUIVar.ttf");
+            modder.CopyFile("Windows/fonts/seguisym.ttf");
+            modder.CopyFile("Windows/fonts/segmdl2.ttf");
+            modder.CopyFile("Windows/fonts/SegoeIcons.ttf");
             modder.CopyFile("Windows/System32/Windows.UI.Logon.dll");
             modder.CopyFile("Windows/System32/Windows.UI.XamlHost.dll");
             modder.CopyFile("Windows/System32/Windows.UI.Xaml.Controls.dll");

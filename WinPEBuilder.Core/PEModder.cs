@@ -284,8 +284,13 @@ namespace WinPEBuilder.Core
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\AppModel");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\Authentication");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows NT\\CurrentVersion\\Winlogon");
+            CopyKey(HiveTypes.Software, "Microsoft\\Windows NT\\CurrentVersion\\Fonts");
+            CopyKey(HiveTypes.Software, "Microsoft\\Hvsi");
+            CopyKey(HiveTypes.Software, "Microsoft\\Input");
             CopyKey(HiveTypes.Software, "Microsoft\\COM3");
-
+            RegistryKey kk = SoftwareHive.RootKey.CreateSubKey("Microsoft");
+            kk.CreateSubKey("XAML").Close();
+            kk.Close();
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\SharedPC");
 
             CopyKey(HiveTypes.Software, "Microsoft\\AppModel");

@@ -21,6 +21,7 @@ using System.Windows.Threading;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using ControlzEx.Theming;
 using WinPEBuilder.WPF.Configuration;
+using System.Media;
 
 namespace WinPEBuilder.WPF
 {
@@ -149,6 +150,8 @@ namespace WinPEBuilder.WPF
             ProgressText.Text = "";
             TabControlHeader.Visibility = Visibility.Visible;
             BuildButton.IsEnabled = true;
+            this.ShowMessageAsync("Success", "Project built successfully");
+            SystemSounds.Exclamation.Play();
         }
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
