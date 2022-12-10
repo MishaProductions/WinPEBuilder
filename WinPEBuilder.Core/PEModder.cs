@@ -59,7 +59,7 @@ namespace WinPEBuilder.Core
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("error while copying file: " + ex.ToString());
+                    Debug.WriteLine("Error while copying file: " + ex.ToString());
                 }
 
             }
@@ -115,7 +115,7 @@ namespace WinPEBuilder.Core
                 destKey = dest.RootKey.CreateSubKey(key, RegistryKeyPermissionCheck.ReadWriteSubTree);
                 if (destKey == null)
                 {
-                    Debug.WriteLine("failed to create key: " + key);
+                    Debug.WriteLine("Failed to create key: " + key);
                     Debugger.Break();
                     return;
                 }
@@ -213,6 +213,7 @@ namespace WinPEBuilder.Core
         {
             //needed for modern explorer
             CopyFile("Windows/System32/shellstyle.dll");
+            // Partial implementation of BCH (only folder): Directory.CreateDirectory(Base + "Windows/BugCheckHack");
             Directory.CreateDirectory(Base + "Windows/Resources/Themes/Aero/Shell/");
             Directory.CreateDirectory(Base + "Windows/Resources/Themes/Aero/Shell/NormalColor/");
             CopyFile("Windows/Resources/Themes/Aero/Shell/NormalColor/ShellStyle.dll");
