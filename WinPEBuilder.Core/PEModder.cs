@@ -166,9 +166,9 @@ namespace WinPEBuilder.Core
 
             //set default value
             var defvalue = sourceKey.GetValue("");
-            var defvaltype = sourceKey.GetValueKind("");
             if (defvalue != null)
             {
+                var defvaltype = sourceKey.GetValueKind("");
                 if (defvalue is string a)
                 {
                     defvalue = a.Replace("C:\\", "X:\\");
@@ -286,6 +286,12 @@ namespace WinPEBuilder.Core
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\AppModel");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\Authentication");
             CopyKey(HiveTypes.Software, "Microsoft\\Windows NT\\CurrentVersion\\Winlogon");
+            RegistryKey winlogon = SoftwareHive.RootKey.CreateSubKey("Microsoft\\Windows NT\\CurrentVersion\\Winlogon");
+            winlogon.SetValue("Shell", "cmd.exe", RegistryValueKind.String);
+            winlogon.SetValue("ShellInfrastructure", "cmd.exe", RegistryValueKind.String);
+            winlogon.Close();
+
+
             CopyKey(HiveTypes.Software, "Microsoft\\Windows NT\\CurrentVersion\\Fonts");
             CopyKey(HiveTypes.Software, "Microsoft\\Hvsi");
             CopyKey(HiveTypes.Software, "Microsoft\\Input");
