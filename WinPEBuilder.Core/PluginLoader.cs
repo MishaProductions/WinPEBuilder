@@ -37,7 +37,7 @@ namespace WinPEBuilder.Core
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Loading plugin {item} failed: {ex.ToString()}");
+                    Debug.WriteLine($"Loading plugin {item} failed: {ex}");
                 }
             }
             return x.ToArray();

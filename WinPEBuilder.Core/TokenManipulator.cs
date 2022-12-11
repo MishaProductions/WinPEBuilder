@@ -29,7 +29,7 @@ namespace WinPEBuilder.Core
 
 
         [DllImport("advapi32.dll", SetLastError = true)]
-        internal static extern bool LookupPrivilegeValue(string host, string name,
+        internal static extern bool LookupPrivilegeValue(string? host, string name,
         ref long pluid);
 
 

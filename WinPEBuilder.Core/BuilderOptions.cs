@@ -26,10 +26,10 @@ namespace WinPEBuilder.Core
         /// </summary>
         public string? Emoticon { get; set; }
         public string? Str1 { get; set; }
-        public string ?Str2 { get; set; }
-        public string ?WebURL { get; set; }
-        public string ?Support { get; set; }
-        public string ?Fixes { get; set; }
+        public string? Str2 { get; set; }
+        public string? WebURL { get; set; }
+        public string? Support { get; set; }
+        public string? Fixes { get; set; }
         public bool AeroBSOD { get; set; }
     }
 }

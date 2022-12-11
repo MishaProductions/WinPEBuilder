@@ -34,7 +34,7 @@ namespace WinPEBuilder.Core
         public Hive? InstallSoftwareHive;
         public Hive? InstallSystemHive;
         public Builder Builder { get; private set; }
-        internal static UIntPtr HKEY_LOCAL_MACHINE = new UIntPtr(0x80000002u);
+        internal static UIntPtr HKEY_LOCAL_MACHINE = new(0x80000002u);
         public PEModder(Builder builder)
         {
             Base = builder.ImagePath;
@@ -128,12 +128,12 @@ namespace WinPEBuilder.Core
         }
         private void CopyKeyInternal(RegistryKey sourceKey, RegistryKey destKey)
         {
-            if (sourceKey is null)
+            if (sourceKey == null)
             {
                 throw new ArgumentNullException(nameof(sourceKey));
             }
 
-            if (destKey is null)
+            if (destKey == null)
             {
                 throw new ArgumentNullException(nameof(destKey));
             }
@@ -150,7 +150,7 @@ namespace WinPEBuilder.Core
                 }
                 else if (type == RegistryValueKind.MultiString)
                 {
-                    string[] t = (string[])val;
+                    string[]? t = (string[]?)val;
                     if (t != null)
                     {
                         for (int i = 0; i < t.Length; i++)
@@ -165,7 +165,8 @@ namespace WinPEBuilder.Core
             }
 
             //set default value
-            var defvalue = sourceKey?.GetValue("");
+            var defvalue = sourceKey.GetValue("");
+            var defvaltype = sourceKey.GetValueKind("");
             if (defvalue != null)
             {
                 if (defvalue is string a)
@@ -179,7 +180,7 @@ namespace WinPEBuilder.Core
                         ((string[])defvalue)[i] = t[i].Replace(@"C:\", @"X:\");
                     }
                 }
-                destKey.SetValue("", defvalue, sourceKey.GetValueKind(""));
+                destKey.SetValue("", defvalue, defvaltype);
             }
 
             //Copy subkeys

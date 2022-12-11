@@ -24,16 +24,11 @@ namespace WinPEBuilder.WPF.Configuration
 
             //load the data
             var json = File.ReadAllText(saveConfigName);
-            Data = JsonSerializer.Deserialize<DataModel>(json);
-            if (Data == null)
-            {
-                Data = new DataModel();
-            }
+            var x = JsonSerializer.Deserialize<DataModel>(json);
 
-            if (Data == null)
-            {
-                throw new Exception("settings load failed");
-            }
+            x ??= new DataModel();
+
+            Data = x;
         }
 
         public static void Save()

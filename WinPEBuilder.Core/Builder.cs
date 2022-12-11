@@ -9,9 +9,9 @@ namespace WinPEBuilder.Core
     public class Builder
     {
         public BuilderOptions Options { get; private set; }
-        private string IsoPath;
-        public static string WorkingDir = "";
-        public static string Version = "0.0.0.3a";
+        private readonly string IsoPath;
+        public static string WorkingDir { get; set; } = "";
+        public const string Version = "0.0.0.3a";
         public List<IPlugin> Plugins { get; }
         /// <summary>
         /// Location of the new image such as Z:\
@@ -83,7 +83,7 @@ namespace WinPEBuilder.Core
 
         public void Start()
         {
-            Thread t = new Thread(WorkerThread);
+            Thread t = new(WorkerThread);
             t.Start();
         }
 
@@ -208,8 +208,8 @@ namespace WinPEBuilder.Core
         }
         private int VHDInstallBootSector()
         {
-            Process process = new Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo
+            Process process = new();
+            ProcessStartInfo startInfo = new()
             {
                 UseShellExecute = true,
                 CreateNoWindow = true,
@@ -219,7 +219,7 @@ namespace WinPEBuilder.Core
             };
             startInfo.UseShellExecute = false;
             process.StartInfo = startInfo;
-            process.OutputDataReceived += (sender, e) => Debug.WriteLine(e.Data);
+            process.OutputDataReceived += (sender, e) => Log(e.Data);
             process.Start();
             process.BeginOutputReadLine();
 
@@ -232,8 +232,8 @@ namespace WinPEBuilder.Core
         private int UnmountVHD(string isoPath)
         {
             string scriptfile = WorkingDir + @"temp\unmountvhd.txt";
-            Process process = new Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo
+            Process process = new();
+            ProcessStartInfo startInfo = new()
             {
                 UseShellExecute = true,
                 CreateNoWindow = true,
@@ -252,7 +252,7 @@ namespace WinPEBuilder.Core
 
             startInfo.UseShellExecute = false;
             process.StartInfo = startInfo;
-            process.OutputDataReceived += (sender, e) => Debug.WriteLine(e.Data);
+            process.OutputDataReceived += (sender, e) => Log(e.Data);
             process.Start();
             process.BeginOutputReadLine();
 
@@ -266,8 +266,8 @@ namespace WinPEBuilder.Core
         private int CreateVHD(string isoPath)
         {
             string scriptfile = WorkingDir + @"temp\createvhd.txt";
-            Process process = new Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo
+            Process process = new();
+            ProcessStartInfo startInfo = new()
             {
                 UseShellExecute = true,
                 CreateNoWindow = true,
@@ -308,7 +308,7 @@ namespace WinPEBuilder.Core
 
             startInfo.UseShellExecute = false;
             process.StartInfo = startInfo;
-            process.OutputDataReceived += (sender, e) => Debug.WriteLine(e.Data);
+            process.OutputDataReceived += (sender, e) => Log(e.Data);
             process.Start();
             process.BeginOutputReadLine();
 
@@ -322,8 +322,8 @@ namespace WinPEBuilder.Core
 
         public int MountImage(string imageFile, int imageIndex, string mountdir)
         {
-            Process process = new Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo
+            Process process = new();
+            ProcessStartInfo startInfo = new()
             {
                 UseShellExecute = true,
                 CreateNoWindow = true,
@@ -333,7 +333,7 @@ namespace WinPEBuilder.Core
             };
             startInfo.UseShellExecute = false;
             process.StartInfo = startInfo;
-            process.OutputDataReceived += (sender, e) => setLabelText(e.Data, "Mounting install.wim");
+            process.OutputDataReceived += (sender, e) => SetLabelText(e.Data, "Mounting install.wim");
             process.Start();
             process.BeginOutputReadLine();
 
@@ -345,8 +345,8 @@ namespace WinPEBuilder.Core
         }
         public int ApplyImage(string imageFile, int imageIndex, string applydir)
         {
-            Process process = new Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo
+            Process process = new();
+            ProcessStartInfo startInfo = new()
             {
                 UseShellExecute = true,
                 CreateNoWindow = true,
@@ -356,7 +356,7 @@ namespace WinPEBuilder.Core
             };
             startInfo.UseShellExecute = false;
             process.StartInfo = startInfo;
-            process.OutputDataReceived += (sender, e) => setLabelText(e.Data, "Applying " + Path.GetFileName(imageFile));
+            process.OutputDataReceived += (sender, e) => SetLabelText(e.Data, "Applying " + Path.GetFileName(imageFile));
             process.Start();
             process.BeginOutputReadLine();
 
@@ -366,14 +366,14 @@ namespace WinPEBuilder.Core
             process.Close();
             return exit;
         }
-        private void setLabelText(string? text, string optxt)
+        private void SetLabelText(string? text, string optxt)
         {
             try
             {
                 Debug.WriteLine(text);
                 if (text != null)
                 {
-                    if (text.Contains("%"))
+                    if (text.Contains('%'))
                     {
                         var prg = text.Split('%')[0].Substring(text.Split('%')[0].Length - 4, 4);
                         decimal prgval = 0;
@@ -401,13 +401,11 @@ namespace WinPEBuilder.Core
         }
         void ExtractISO(string ISOName, string ExtractionPath)
         {
-            using (FileStream ISOStream = File.Open(ISOName, FileMode.Open))
-            {
-                UdfReader Reader = new UdfReader(ISOStream);
+            using FileStream ISOStream = File.Open(ISOName, FileMode.Open);
+            UdfReader Reader = new(ISOStream);
 
-                ExtractDirectory(Reader.Root, ExtractionPath + "\\", "");
-                Reader.Dispose();
-            }
+            ExtractDirectory(Reader.Root, ExtractionPath + "\\", "");
+            Reader.Dispose();
         }
         int prg = 0;
         void ExtractDirectory(DiscDirectoryInfo Dinfo, string RootPath, string PathinISO)
@@ -424,19 +422,15 @@ namespace WinPEBuilder.Core
             }
             foreach (DiscFileInfo finfo in Dinfo.GetFiles())
             {
-                using (Stream FileStr = finfo.OpenRead())
+                using Stream FileStr = finfo.OpenRead();
+                using FileStream Fs = File.Create(RootPath + "\\" + finfo.Name); // Here you can Set the BufferSize Also e.g. File.Create(RootPath + "\\" + finfo.Name, 4 * 1024)
+                FileStr.CopyTo(Fs, 16 * 1024); // Buffer Size is 16 * 1024 but you can modify it in your code as per your need
+                if (prg >= 100)
                 {
-                    using (FileStream Fs = File.Create(RootPath + "\\" + finfo.Name)) // Here you can Set the BufferSize Also e.g. File.Create(RootPath + "\\" + finfo.Name, 4 * 1024)
-                    {
-                        FileStr.CopyTo(Fs, 16 * 1024); // Buffer Size is 16 * 1024 but you can modify it in your code as per your need
-                        if (prg >= 100)
-                        {
-                            //todo improve progress
-                            prg = 1;
-                        }
-                        OnProgress?.Invoke(false, prg++, "Extracting ISO");
-                    }
+                    //todo improve progress
+                    prg = 1;
                 }
+                OnProgress?.Invoke(false, prg++, "Extracting ISO");
             }
         }
         static void AppendDirectory(string path)
@@ -452,11 +446,19 @@ namespace WinPEBuilder.Core
             }
             catch (DirectoryNotFoundException)
             {
-                AppendDirectory(Path.GetDirectoryName(path));
+                var x = Path.GetDirectoryName(path);
+                if (x != null)
+                {
+                    AppendDirectory(x);
+                }
             }
             catch (PathTooLongException)
             {
-                AppendDirectory(Path.GetDirectoryName(path));
+                var x = Path.GetDirectoryName(path);
+                if (x != null)
+                {
+                    AppendDirectory(x);
+                }
             }
         }
 
@@ -464,10 +466,13 @@ namespace WinPEBuilder.Core
         {
             OnProgress?.Invoke(error, prg, message);
         }
-        public void Log(string message)
+        public void Log(string? message)
         {
-            Debug.WriteLine(message);
-            OnLog?.Invoke(message + Environment.NewLine);
+            if (message != null)
+            {
+                Debug.WriteLine(message);
+                OnLog?.Invoke(message + Environment.NewLine);
+            }
         }
     }
 }

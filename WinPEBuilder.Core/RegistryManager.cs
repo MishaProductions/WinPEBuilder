@@ -47,13 +47,13 @@ namespace WinPEBuilder.Core
         private RegistryKey parentKey;
         private string name;
         private string originalPath;
-        public RegistryKey RootKey;
+        public RegistryKey RootKey { get; set; }
 
         private Hive() { }
 
         public static Hive LoadFromFile(string Path, string Name)
         {
-            Hive result = new Hive();
+            Hive result = new();
 
             result.parentKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default);
             result.name = Name;//Guid.NewGuid().ToString();
@@ -76,20 +76,18 @@ namespace WinPEBuilder.Core
         public static void AcquirePrivileges()
         {
             ulong luid = 0;
-            bool throwaway;
             LookupPrivilegeValue(IntPtr.Zero, "SeRestorePrivilege", ref luid);
-            RtlAdjustPrivilege((int)luid, true, false, out throwaway);
+            RtlAdjustPrivilege((int)luid, true, false, out _);
             LookupPrivilegeValue(IntPtr.Zero, "SeBackupPrivilege", ref luid);
-            RtlAdjustPrivilege((int)luid, true, false, out throwaway);
+            RtlAdjustPrivilege((int)luid, true, false, out _);
         }
         public static void ReturnPrivileges()
         {
             ulong luid = 0;
-            bool throwaway;
             LookupPrivilegeValue(IntPtr.Zero, "SeRestorePrivilege", ref luid);
-            RtlAdjustPrivilege((int)luid, false, false, out throwaway);
+            RtlAdjustPrivilege((int)luid, false, false, out _);
             LookupPrivilegeValue(IntPtr.Zero, "SeBackupPrivilege", ref luid);
-            RtlAdjustPrivilege((int)luid, false, false, out throwaway);
+            RtlAdjustPrivilege((int)luid, false, false, out _);
         }
         public void SaveAndUnload()
         {
