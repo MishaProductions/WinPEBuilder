@@ -93,7 +93,7 @@ namespace WinPEBuilder.Core.Plugins
             modder.CopyFile("Windows/System32/cldapi.dll");
             modder.CopyFile("Windows/System32/EhStorShell.dll");
             modder.CopyFile("Windows/System32/mycomput.dll");
-            modder.CopyFile("Windows/System32/combase.dll"); //??
+            modder.CopyFile("Windows/System32/combase.dll"); //just in case
             modder.CopyFile("Windows/System32/en-us/mycomput.dll.mui");
             modder.CopyFile("Windows/SysWOW64/propsys.dll");
             modder.CopyFile("Windows/System32/AssignedAccessManager.dll");
@@ -108,6 +108,9 @@ namespace WinPEBuilder.Core.Plugins
             modder.CopyFile("Windows/System32/wlidprov.dll");
             modder.CopyFile("Windows/System32/wpncore.dll");
             modder.CopyFile("Windows/System32/netprofm.dll");
+            modder.CopyFile("Windows/System32/UIRibbon.dll");
+            modder.CopyFile("Windows/System32/UIRibbonRes.dll");
+            modder.CopyFile("Windows/System32/Windows.Internal.OpenWithHost.dll");
 
 
             //sihost needs these
