@@ -87,8 +87,10 @@ namespace WinPEBuilder.Core.Plugins
             modder.CopyFile("Windows/System32/clbcatq.dll");
             modder.CopyFile("Windows/System32/ClipSVC.dll");
             modder.CopyFile("Windows/System32/WpnService.dll");
+            modder.CopyFile("Windows/System32/en-us/WpnService.dll.mui");
             modder.CopyFile("Windows/System32/appextension.dll");
             modder.CopyFile("Windows/System32/WpnUserService.dll");
+            modder.CopyFile("Windows/System32/en-us/WpnUserService.dll.mui");
             modder.CopyFile("Windows/System32/Windows.UI.FileExplorer.dll");
             modder.CopyFile("Windows/System32/cldapi.dll");
             modder.CopyFile("Windows/System32/EhStorShell.dll");
@@ -111,7 +113,8 @@ namespace WinPEBuilder.Core.Plugins
             modder.CopyFile("Windows/System32/UIRibbon.dll");
             modder.CopyFile("Windows/System32/UIRibbonRes.dll");
             modder.CopyFile("Windows/System32/Windows.Internal.OpenWithHost.dll");
-
+            modder.CopyFile("Windows/System32/StorageUsage.dll");
+            modder.CopyFile("Windows/System32/appinfo.dll");
 
             //sihost needs these
             modder.CopyFile("Windows/System32/Windows.Shell.ServiceHostBuilder.dll");
@@ -119,11 +122,17 @@ namespace WinPEBuilder.Core.Plugins
             modder.CopyFile("Windows/System32/ClipboardServer.dll");
             modder.CopyFile("Windows/System32/ActivationManager.dll");
             modder.CopyFile("Windows/System32/modernexecserver.dll");
+            modder.CopyDir("Windows/system32/Dism/");
             modder.CopyService("camsvc");
             modder.CopyService("WpnService");
+            modder.CopyService("appinfo");
+            modder.CopyService("Themes");
             modder.CopyService("WpnUserService");
             modder.CopyService("StateRepository");
             modder.CopyService("ClipSVC");
+            modder.CopyService("EventLog");
+            modder.CopyService("ShellHWDetection");
+            modder.CopyService("wcncsvc");
             Directory.CreateDirectory(modder.Base + "ProgramData/Microsoft/Windows/AppRepository");
             modder.CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\AppX");
             modder.CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager");
@@ -132,6 +141,8 @@ namespace WinPEBuilder.Core.Plugins
             modder.CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\ActionCenter");
             modder.CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\ApplicationFrame");
             modder.CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\ShellCompatibility");
+            modder.CopyKey(HiveTypes.Software, "Microsoft\\Windows NT\\CurrentVersion\\ProfileNotification");
+            modder.CopyKey(HiveTypes.Software, "Microsoft\\Windows\\CurrentVersion\\OOBE");
             modder.CopyKey(HiveTypes.System, "ControlSet001\\Services\\CoreUI");
         }
     }
