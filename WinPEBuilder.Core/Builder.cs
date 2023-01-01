@@ -1,4 +1,4 @@
-﻿using DiscUtils;
+using DiscUtils;
 using DiscUtils.Iso9660;
 using DiscUtils.Udf;
 using System.Diagnostics;
@@ -401,11 +401,14 @@ namespace WinPEBuilder.Core
         }
         void ExtractISO(string ISOName, string ExtractionPath)
         {
-            using FileStream ISOStream = File.Open(ISOName, FileMode.Open);
-            UdfReader Reader = new(ISOStream);
+            try
+            {
+                using FileStream ISOStream = File.Open(ISOName, FileMode.Open);
+                UdfReader Reader = new(ISOStream);
 
-            ExtractDirectory(Reader.Root, ExtractionPath + "\\", "");
-            Reader.Dispose();
+                ExtractDirectory(Reader.Root, ExtractionPath + "\\", "");
+                Reader.Dispose();
+            } catch (System.IO.IOException) { OnProgress?.Invoke(true, 0, "File is already in use by another process."); }
         }
         int prg = 0;
         void ExtractDirectory(DiscDirectoryInfo Dinfo, string RootPath, string PathinISO)
