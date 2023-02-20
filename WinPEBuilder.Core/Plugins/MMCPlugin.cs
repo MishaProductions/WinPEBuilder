@@ -25,9 +25,16 @@ namespace WinPEBuilder.Core.Plugins
             modder.CopyFile("Windows/System32/en-us/mmcndmgr.dll.mui");
 
             //todo: why does mfc42loc.dll does not exist?
-            File.Copy(@"C:\windows\Sysnative\mfc42loc.dll", modder.Base + "windows/system32/mfc42loc.dll", true);
-            File.Copy(@"C:\windows\System32\vcruntime140.dll", modder.Base + "windows/system32/vcruntime140.dll",true);
-            File.Copy(@"C:\windows\System32\mfc140.dll", modder.Base + "windows/System32/mfc140.dll", true);
+            try
+            {
+                File.Copy(@"C:\windows\Sysnative\mfc42loc.dll", modder.Base + "windows/system32/mfc42loc.dll", true);
+                File.Copy(@"C:\windows\System32\vcruntime140.dll", modder.Base + "windows/system32/vcruntime140.dll", true);
+                File.Copy(@"C:\windows\System32\mfc140.dll", modder.Base + "windows/System32/mfc140.dll", true);
+            }
+            catch
+            {
+
+            }
         }
     }
 }
