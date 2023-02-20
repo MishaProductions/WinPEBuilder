@@ -238,6 +238,7 @@ namespace WinPEBuilder.Core
 
         internal bool Run()
         {
+            Process.Start("dism", "/image:" + Base + " /Set-TargetPath:X:");
             //needed for modern explorer
             CopyFile("Windows/System32/shellstyle.dll");
             Directory.CreateDirectory(Base + "Windows/Resources/Themes/Aero/Shell/");
