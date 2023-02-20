@@ -52,7 +52,7 @@ namespace WinPEBuilder.Core
                 //check if dest exists
                 if (File.Exists(Base + path))
                 {
-                    TakeOwnership(Base + path, false);
+                    TakeOwnership(Base + path, true);
                 }
                 try
                 {
