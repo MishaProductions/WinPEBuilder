@@ -30,7 +30,7 @@ namespace WinPEBuilder.Core.Plugins
             modder.CopyFile("Windows/System32/NetworkExplorer.dll");
             modder.CopyFile("Windows/System32/en-us/NetworkExplorer.dll.mui");
             modder.CopyFile("Windows/explorer.exe");
-            modder.CopyFile("Windows/en-US/explorer.exe.mui");
+            modder.CopyFile("Windows/en-US  /explorer.exe.mui");
             modder.CopyFile("Windows/System32/rmclient.dll");
             modder.CopyFile("Windows/System32/en-US/RmClient.exe.mui");
             modder.CopyFile("Windows/System32/Windows.Globalization.dll");
@@ -115,6 +115,8 @@ namespace WinPEBuilder.Core.Plugins
             modder.CopyFile("Windows/System32/Windows.Internal.OpenWithHost.dll");
             modder.CopyFile("Windows/System32/StorageUsage.dll");
             modder.CopyFile("Windows/System32/appinfo.dll");
+            modder.CopyFile("Windows/System32/gameux.dll");
+            modder.CopyFile("Windows/System32/MMDevApi.dll");
 
             //sihost needs these
             modder.CopyFile("Windows/System32/Windows.Shell.ServiceHostBuilder.dll");
